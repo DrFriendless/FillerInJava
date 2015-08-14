@@ -1,0 +1,52 @@
+TASKS
+-----
+
+If you would like to help with the internationalisation of Filler, here is
+what is needed. Please forgive me if this document tells you things you
+already know, but I am writing for people who have never encountered Java
+internationalisation before.
+
+ * translate res/friendless/games/filler/resources.properties
+   The string to be translated is the right hand side of the = sign.
+   These strings appear in the user interface, so you can test your
+   translation by running the game and seeing whether it looks right.
+   If you can't figure out where a string is used, please ask me and I
+   will find it in the source code. I have intentionally put the names of
+   the robot players in that file so they can be translated to localised
+   names. Note that many of the names are not English names anyway, as I
+   have tried to give them an international flavour.
+
+ * translate res/friendless/games/filler/help/en/*.html. The 'en' in the
+   path name is a Java locale specifier, so 'en' means English. Similarly
+   'fr' is French and 'de' is German. The game looks up the current locale,
+   looks for a directory of the same name, and uses files in that directory
+   if they exist. If you don't know the correct code, ask me or just make
+   something up and I will fix it when I package the game. It is best to
+   retain the same names for the files, as they are referred to from the code.
+   If you don't have time to translate the HTML documentation, I will get
+   Babelfish to do it, which could be quite funny.
+
+
+HISTORY
+-------
+
+Version 1.1 will be available in:
+
+Danish              Jacob Kjeldahl
+Swedish			Anders Oquist (oquist.anders@telia.com)
+French			trexmaster@caramail.com
+Spanish			Fabian Rodriguez (Fabian.Rodriguez@toxik.com)
+German			Martin Heintze (MTHeintze@gmx.net)
+Italian			Fabio Restano (fares@users.sourceforge.net)
+
+Dutch			Guus der Kinderen (guus@ch.twi.tudelft.nl)
+Polish			Wojciech Jeczmien (jeczmien@panda.bg.univ.gda.pl)
+
+Version 1.01 was available in:
+
+Russian			Alexei Sinitsyn (sinitsin@softhome.net)
+Finnish			Sini Ruohomaa (siruohom@earthling.net)
+
+Version 1.0 was available in:
+
+English			John Farrell (friendless@users.sourceforge.net)

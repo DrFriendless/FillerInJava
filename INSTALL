@@ -1,0 +1,8 @@
+In the top directory (same directory as this file), run 'make'. That will
+build a jar file for you. You then need to be super-user (root), and run
+'make install'. If you can't be super-user, just do 'java -jar filler.jar'
+instead.
+
+The executable program is called 'filler', and will be installed in
+/usr/local/bin. Since release 1.01, filler will use your shell variable
+LANG to set the language that it runs in.

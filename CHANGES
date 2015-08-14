@@ -1,0 +1,27 @@
+Since 1.01
+----------
+
+ * Added 'inc' to 'other' directory. This is the code header you include
+   to say that the code is released under GPL.
+ * Removed resources_de.properties, resources_fr.properties, as I wrote them
+   and they were pretty bad.
+ * Added sortByRandom() to PlayerWrappers.
+ * Added 'build.xml' to 'other'. This is for use with ant.
+ * Cleaned up some access privileges on some fields, cleaned up some bad identifiers.
+ * Added Kris Verbeeck's RemotePlayer.
+
+Since 1.0
+---------
+
+ * Added INTERNATIONALISATION file.
+ * Added 'filler.spec' to 'other' directory.
+ * Removed erroneous line from resources.properties
+ * Changed filler script to pass extra parameters through to Java
+ * Changed filler script to pass LANG variable as user language.
+ * Modified Filler.java to work around a bug in Sun's JDK1.3 for Linux,
+   where the default locale was always en_US no matter what the user.language
+   setting was. Filler now uses a method similar to that in the Locale class to
+   figure out what the locale should be.
+ * Fixed bug where player descriptions were not i18ned correctly.
+ * Added Finnish translation by Sini Ruohomaa.
+ * Added Russian translation by Alexei Sinitsyn.

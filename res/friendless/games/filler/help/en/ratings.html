@@ -1,0 +1,47 @@
+<HTML>
+<HEAD>
+<TITLE>Ratings</TITLE>
+</HEAD>
+<BODY>
+<H1>Ratings</H1>
+<P>
+The ratings system used in Filler is a variant of the Elo rating system
+which was invented by Dr Arpad Elo.
+When a player starts, they have a nominal rating of 1600 points.
+When a player loses a game, they lose points, and when they win a game,
+they gain the points the other player lost.
+In Filler, a player can lose or gain at most 32 points in one game.
+The number of points gained or lost depends on the difference in the
+players ratings. 
+A win over a player ranked equal will gain 16 points (half of 32).
+A win over a player ranked higher will gain more than 16 points,
+and a win over a player ranked lower will gain fewer than 16 points.
+<P>
+The Filler rating system assumes that a player will never be able to 
+defeat a player ranked 400 points or more higher.
+Consequently, defeating a player ranked 400 points lower will result
+in no points being transferred.
+Defeating a player ranked 400 points higher will result in a full gain 
+of 32 points.
+<P>
+For the first 20 games a player plays, their rating is considered to be
+provisional.
+This means that wins over higher ranked opponents will gain them
+bonus points, and losses to lower ranked opponents will cost them
+penalty points.
+This allows a player to reach their approximately correct ranking faster
+than the usual system would allow.
+The bonus and penalty points do not affect the opponent's rating.
+<P>
+The benefit of the rating system for players of Filler is that it
+allows them to match their skills against the robot players, and to
+easily choose robot players with sufficiently challenging skills.
+<P>
+The game keeps track of rankings, which are your categorisation into skill
+levels according to your rating, and head to head results, which are the 
+historical number of wins and losses for each pair of players.
+See also <A HREF="rankings.html">Rankings</A>.
+<P>
+<A HREF="index.html">Index</A>
+</BODY>
+</HTML>

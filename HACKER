@@ -1,0 +1,82 @@
+Hackers Only
+------------
+
+You're welcome to hack on any part of Filler, but these are the areas
+that I am most interested in seeing advanced.
+
+ * Better robot players. I believe it's possible to write a robot player
+   which can beat almost all humans, even in Java. Note that all robot
+   players should be tested to ensure that they terminate. I have had
+   many instances where a robot player was in a position to win but
+   insisted on choosing the wrong colour and hence the game could not
+   finish.
+ * Worse robot players. Bad robot players are needed as cannon fodder for the
+   good robot players to help the ratings system work. They are also
+   useful to pit against bad human players.
+ * Better user interface. My GUI design skills are somewhat lacking,
+   and someone with some artistic talent could do a nice job I'm sure.
+ * Support for network play, i.e. a player at the other end of a TCP
+   connection. It would be cool if the other end of the connection could
+   be a robot player, and we could do some sort of Turing test :-).
+ * Support for cyborg players, i.e. human players assisted by the
+   robot algorithms.
+ * Better support for human players, so that they could have names other
+   than 'Human' and they could have different rankings.
+ * Support for new players, who may not know what the heck is going on
+   with all these computer players. It would be nice if the program
+   could automatically choose a computer player to match or challenge
+   their skill level.
+ * Better configurability, so maybe you could change the 9 colours,
+   and the game can remember the x,y location of the window and the
+   current tournament rules. I would suggest keeping all this info in
+   a Map and serialising it out to a file. At the very least, the game
+   needs to be able to run in an alternate colours mode so that
+   colour-blind people can play it.
+ * Internationalisation. The code and Java support internationalisation,
+   and all (hopefully) of the strings used in the game are in the file
+   resources.properties, so internationalising will hopefully be a
+   simple matter of producing new versions of the resource file. See the
+   file INTERNATIONALISATION for more details.
+ * A Windows installation. Although the code will run perfectly well on Windows,
+   some Windows users who have Java will not know how to build the jar and run
+   it, as 'make' doesn't come standard with Windows. It would be good to have
+   the game packaged as an EXE which will install itself. I have added a windows
+   target to the Makefile, which will at least make a batch file for Windows.
+ * Put forward and back buttons on the help panel.
+ * Make sure that all the right buttons and tabs are disabled. I think
+   At the moment you can start a tournament while a tournament is 
+   already in progress, and I don't know what will happen if you do that.
+ * The tournament results are not well presented (e.g. if you are lucky, you
+   get told who the winner was). It would be nice to have another panel where
+   the tournament results are presented. (This idea came from Lang Sharpe.)
+   
+Coding Rules
+------------
+
+If you want your code to get into my code base, you'll need to follow these
+rules, because I am very fussy. If I really like your ideas I will code them
+myself, but that will take longer.
+
+ * Follow the coding style (brackets, spaces, NO TABS). It is Sun's standard,
+   so it is not too onerous.
+ * Any strings which appear on the GUI must come from the resource file.
+
+I hope you'll find the source code easy to understand and well
+documented. I also hope you'll keep it that way if you add to it, because
+if you don't I will, and I won't be happy about that. Please send
+changes back to me (friendless@users.sourceforge.net), and I'll include
+the ones I like.
+
+Organisation
+------------
+
+The organisation of the source distribution is as follows:
+
+ * src - the Java source code.
+ * res - Java resources. Must go in your CLASSPATH if you are not running from
+   the jar.
+ * classes - created by the make command. Must go in your CLASSPATH if you are
+   not running from the jar.
+ * windows - the prebuilt Windows distribution.
+ * other - an assortment of other files which are used in the build process, or
+   are useful to developers.

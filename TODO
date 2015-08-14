@@ -1,0 +1,22 @@
+ * Development release
+ 
+FOR RELEASE 1.02
+
+ * Remove System.out.printlns which are replaced by tournament results.
+ * Remove use of "\n"
+ * Badcode
+
+FOR RELEASE 1.1 (or later point release)
+
+ * Web page.
+ * Write developer guide.
+ * Modify I18N to say how to run in different locale.
+ * Add RPM to Makefile.
+ * Cancel button disabled for interactive games, 
+   works immediately for non-interactive.
+ * Tooltip for Play tab.
+
+FOR RELEASE 2.0 (or later major release)
+
+ * Run as an applet
+ * Multi-player

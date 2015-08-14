@@ -1,0 +1,7 @@
+Thanks to Alexander Vikulin for writing the original (Windows) version
+of Filler. I wrote this version to study the robot algorithms, and to
+try to find a worthy opponent. I also wrote it to prove that Java is
+fast enough for complex algorithms and complex games.
+
+Please look at the INSTALL file for installation tips.
+Please look at the HACKER file for ideas for developers.
