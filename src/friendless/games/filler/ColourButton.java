@@ -37,8 +37,8 @@ public class ColourButton extends JButton {
         setMinimumSize(new Dimension(WIDTH, HEIGHT));
         setOpaque(true);
         setRolloverEnabled(false);
-        setText(Integer.toString(id/2+1));
-        setMargin(new Insets(1,1,1,1));
+        setText(Integer.toString(id / 2 + 1));
+        setMargin(new Insets(1, 1, 1, 1));
         setFocusPainted(false);
         setBorderPainted(true);
         setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));

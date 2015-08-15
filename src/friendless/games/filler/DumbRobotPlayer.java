@@ -24,23 +24,23 @@ import java.util.*;
  */
 public abstract class DumbRobotPlayer extends AbstractFillerPlayer {
     /** The colour I already am. */
-    protected int colour;
+    protected int myColour;
     protected int otherPlayerColour;
 
     public DumbRobotPlayer() {
-        colour = 0;
+        myColour = 0;
     }
 
     protected BitSet allUsefulColours() {
         BitSet b = allColours();
-        if (colour >= 0) b.clear(colour);
+        if (myColour >= 0) b.clear(myColour);
         if (otherPlayerColour >= 0) b.clear(otherPlayerColour);
         return b;
     }
 
     /** Choose colours one after another. */
-    public int cycle_turn() {
-        int favourite = (colour + 1) % FillerSettings.NUM_COLOURS;
+    public int cycleTurn() {
+        int favourite = (myColour + 1) % FillerSettings.NUM_COLOURS;
         if (favourite == otherPlayerColour) {
             favourite = (favourite + 1) % FillerSettings.NUM_COLOURS;
         }
@@ -48,7 +48,7 @@ public abstract class DumbRobotPlayer extends AbstractFillerPlayer {
     }
 
     /** Choose a random colour. */
-    public int random_turn() {
+    public int randomTurn() {
         return chooseRandom(allUsefulColours());
     }
 
@@ -56,12 +56,12 @@ public abstract class DumbRobotPlayer extends AbstractFillerPlayer {
 
     public int takeTurn(FillerModel model, int otherPlayerColour) {
         this.otherPlayerColour = otherPlayerColour;
-        colour = turn();
-        if (colour < 0) {
-            colour = random_turn();
+        myColour = turn();
+        if (myColour < 0) {
+            myColour = randomTurn();
             System.out.println(getName() + " chooses randomly");
         }
-        return colour;
+        return myColour;
     }
 
     /**

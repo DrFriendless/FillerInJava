@@ -17,7 +17,7 @@ package friendless.games.filler.player;
 import friendless.games.filler.*;
 
 /**
- * Makhaya is an experimental strategy. He chooses the colour which will most stop him from expanding.
+ * Makhaya is an experimental strategy. He chooses the myColour which will most stop him from expanding.
  * Named for South African cricketer Makhaya Ntini.
  *
  * @author John Farrell
@@ -27,7 +27,7 @@ public class Makhaya extends RobotPlayer {
 
     public int turn() {
         int attempt = dontExpandTurn();
-        if (attempt == colour) attempt = -1;
+        if (attempt == myColour) attempt = -1;
         if (attempt < 0) attempt = mostTurn();
         return attempt;
     }

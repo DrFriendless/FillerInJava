@@ -34,7 +34,7 @@ public class PlayerWrappers {
         "HumanFillerPlayer", "RemotePlayer", "Sachin", "Dieter", "Isadora",
         "Margaret", "Rosita", "Luigi", "Makhaya", "Claudius", "Basil", "Wanda",
         "Mainoumi", "Omar", "Shirley", "Hugo", "Eldine", "Aleksandr", "Manuelito",
-        "Che", "Cochise", "Jefferson", "Chesterton" };
+        "Che", "Cochise", "Jefferson", "Chesterton", "Bronwyn", "Helen" };
     public static final String PLAYER_PACKAGE = "friendless.games.filler.player";
     private static Random rng = new Random();
 

@@ -7,7 +7,7 @@ public abstract class VotingRobotPlayer extends RobotPlayer {
     protected int votersChoice(int[] votes) {
         int best = -1;
         int bestVotes = -1;
-        votes[colour] = -1;
+        votes[myColour] = -1;
         for (int i=0; i<votes.length; i++) {
             if (votes[i] > bestVotes) {
                 bestVotes = votes[i];

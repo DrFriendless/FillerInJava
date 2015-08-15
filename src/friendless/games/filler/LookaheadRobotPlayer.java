@@ -23,22 +23,22 @@ import java.util.*;
  * @author John Farrell
  */
 abstract public class LookaheadRobotPlayer extends RobotPlayer {
-    public int lookahead(Evaluator evaluator) {
+    public int lookahead(Evaluator evaluator, boolean distance, boolean opponentDistance) {
         int[] pieces = copy(model.pieces);
         BitSet results = (BitSet) NO_COLOURS.clone();
         int highest = Integer.MIN_VALUE;
         for (int c=0; c<FillerSettings.NUM_COLOURS; c++) {
-            if (c == otherPlayerColour || c == colour) continue;
+            if (c == otherPlayerColour || c == myColour) continue;
             FillerModel model = new FillerModel(pieces);
             // pretend we took colour c
             int[] counted = space.counted;
-            calculate(model);
+            calculate(model, false, false);
             for (int i=0; i<counted.length; i++) {
                 if (counted[i] == FillerModel.MINE) model.pieces[i] = c;
             }
-            calculate(model);
-            // now which gets us furthest from our origin?
-            int score = evaluator.eval(model, counted);
+            calculate(model, distance, opponentDistance);
+            // now how much does that score?
+            int score = evaluator.eval(model, space, origins);
             if (score == highest) {
                 results.set(c);
             } else if (score > highest) {
@@ -50,17 +50,10 @@ abstract public class LookaheadRobotPlayer extends RobotPlayer {
         return chooseRandom(results);
     }
 
-    public class ExpandEvaluator implements Evaluator {
-        public int eval(FillerModel model, int[] counted) {
-            int furthest = Integer.MIN_VALUE;
-            for (int i=0; i<counted.length; i++) {
-                if (counted[i] == FillerModel.BORDER || counted[i] == FillerModel.SHARED_BORDER) {
-                    int dist = sideDistance(origins[0], i);
-                    if (dist > furthest) furthest = dist;
-                }
-            }
-            return furthest;
-        }
+    protected void calculate(FillerModel model, boolean distance, boolean opponentDistance) {
+        FillerModel.allocateTypes(model, origins, space);
+        if (distance) FillerModel.allocateDistance(model, space);
+        if (opponentDistance) FillerModel.allocateOpponentDistance(model, space);
     }
 
     public String getIcon() { return "badrock.png"; }

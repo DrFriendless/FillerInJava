@@ -27,7 +27,7 @@ public class EloRating {
     public static String NOVICE, CLASSA, CLASSB, CLASSC, CLASSD, EXPERT, MASTER,
         INTLMASTER, GRANDMASTER, SUPERGRANDMASTER, WORLDCHAMPION;
     public static String[] TITLES;
-    public static final int[] RATINGS = { 0, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2100, 2200, 2300 };
+    public static final int[] RATINGS = { 0, 800, 1000, 1200, 1400, 1600, 1800, 1950, 2000, 2100, 2200 };
     public static final int INITIAL = 1600;
     public static final int PROVISIONAL = 20;
 

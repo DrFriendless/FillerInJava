@@ -43,7 +43,7 @@ public abstract class OptimalRobotPlayer extends RobotPlayer {
         /* We now know the distance to the goal.
          * We have to find a sequence of locations with ever-decreasing distances
          * until we get to locations which are distance 0, i.e. on the border.
-         * We then choose any colour from those distance 0 locations.
+         * We then choose any myColour from those distance 0 locations.
          */
         space.resetListed();
         boolean[] listed = space.listed;
@@ -53,7 +53,7 @@ public abstract class OptimalRobotPlayer extends RobotPlayer {
         int[] lowerDistance = new int[distance.length];
         int lowerDistanceIndex = 0;
         thisDistance[thisDistanceIndex++] = goal;
-        // find all the pieces of the same colour joined to the goal
+        // find all the pieces of the same myColour joined to the goal
         while (thisDistanceIndex > 0) {
             int p = thisDistance[--thisDistanceIndex];
             if (listed[p]) continue;
@@ -90,7 +90,7 @@ public abstract class OptimalRobotPlayer extends RobotPlayer {
                     }
                 }
             }
-            // add neighbours of same colour attached to pieces at the lower distance (yuk)
+            // add neighbours of same myColour attached to pieces at the lower distance (yuk)
             tempArray = lowerDistance;
             lowerDistance = thisDistance;
             thisDistance = tempArray;

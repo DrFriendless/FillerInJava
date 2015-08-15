@@ -31,7 +31,7 @@ public class FillerSettings {
     public static final int[] ORIGINS = { FillerModel.makeIndex(1,14), FillerModel.makeIndex(93,0) };
     public static final int NUM_COLOURS = 9;
     /**
-     * These colour names are used in debugging, amd are not seen by the player,
+     * These colour names are used in debugging, and are not seen by the player,
      * so they don't need to be internationalised.
      */
     public static final String[] colourNames = { "red", "green", "yellow", "blue",

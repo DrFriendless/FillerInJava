@@ -30,7 +30,7 @@ public class Mainoumi extends RobotPlayer {
         int attempt = mostIfWinTurn();
         if (attempt < 0) {
             attempt = opponentMostTurn();
-            if (attempt == colour) attempt = expandTurn();
+            if (attempt == myColour) attempt = expandTurn();
         }
         if (attempt < 0) attempt = mostTurn();
         return attempt;

@@ -22,9 +22,10 @@ package friendless.games.filler;
  */
 public interface Evaluator {
     /**
+     * A higher result is better.
+     *
      * @param model the board position to be evaluated
-     * @param counted the analysis of the board position telling who owns
-     * what.
+     * @param space counted is filled in already.
      */
-    int eval(FillerModel model, int[] counted);
+    int eval(FillerModel model, FillerPlayerSpace space, int[] origins);
 }

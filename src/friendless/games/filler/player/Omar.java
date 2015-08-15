@@ -28,7 +28,7 @@ public class Omar extends LookaheadRobotPlayer {
 
     /** Chooses a colour to get the most points immediately **/
     public int turn() {
-        int attempt = lookahead(eval);
+        int attempt = lookahead(eval, false, false);
         if (attempt < 0) attempt = mostTurn();
         return attempt;
     }

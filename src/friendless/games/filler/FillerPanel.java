@@ -329,7 +329,7 @@ public final class FillerPanel extends JPanel implements KeyListener {
                 }
             }
             if (colours[i] == colours[1-i] || colours[i] < 0 || colours[i] >= FillerSettings.NUM_COLOURS) {
-                // player chose an invalid colour
+                // player chose an invalid myColour
                 System.out.println(opponents[i].getName() + " chose " + colours[i]);
                 colours[i] = oldColour;
             }

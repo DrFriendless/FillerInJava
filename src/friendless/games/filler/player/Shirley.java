@@ -24,5 +24,5 @@ import friendless.games.filler.*;
 public class Shirley extends DumbRobotPlayer {
     public String getName() { return "Shirley"; }
 
-    public int turn() { return random_turn(); }
+    public int turn() { return randomTurn(); }
 }

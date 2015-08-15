@@ -60,7 +60,7 @@ public class Sachin extends OptimalRobotPlayer {
 
     protected int anyBestGoalColour(int goal) {
         BitSet colours = getBestGoalColours(goal);
-        colours.clear(colour);
+        colours.clear(myColour);
         colours.clear(otherPlayerColour);
         int attempt = chooseRandom(colours);
         return attempt;

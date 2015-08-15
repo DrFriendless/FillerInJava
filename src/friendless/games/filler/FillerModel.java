@@ -140,6 +140,7 @@ public class FillerModel {
                 ps[idx++] = makeIndex(xi+1, yi+1);
             }
         }
+        // TODO - we don't even really need these entries.
         while (idx < ps.length) ps[idx++] = NO_NEIGHBOUR;
         return ps;
     }
@@ -235,7 +236,7 @@ public class FillerModel {
             int thisPiece = counted[p];
             if (thisPiece == VACANT || thisPiece == hisBorder) {
                 if (model.pieces[p] == colour) {
-                    // on the border and my colour must be mine
+                    // on the border and my myColour must be mine
                     counted[p] = mine;
                     for (int q : neighs[p]) {
                         if (q == NO_NEIGHBOUR) break;
@@ -248,7 +249,7 @@ public class FillerModel {
                     // on my border and his border must be shared border
                     counted[p] = SHARED_BORDER;
                 } else {
-                    // on the border and another colour but not his border must be my border
+                    // on the border and another myColour but not his border must be my border
                     counted[p] = myBorder;
                     for (int q : neighs[p]) {
                         if (q == NO_NEIGHBOUR) break;
@@ -320,6 +321,64 @@ public class FillerModel {
             } else if (MUST_BE_HIS.get(ci)) {
                 distance[i] = UNREACHABLE_DISTANCE;
             } else if (ci == BORDER || ci == SHARED_BORDER) {
+                distance[i] = 1;
+                // remember where the border is
+                border[idx++] = i;
+                listed[i] = true;
+            } else {
+                distance[i] = UNKNOWN_DISTANCE;
+            }
+        }
+        // figure out the unknown distances
+        while (idx > 0) {
+            // take a point which is currently on the border
+            int p = border[--idx];
+            listed[p] = false;
+            int distp = distance[p];
+            int[] ns = neighs[p];
+            for (int q : ns) {
+                if (q == NO_NEIGHBOUR) break;
+                int distq = distance[q];
+                if (distq == UNREACHABLE_DISTANCE || distq == NO_DISTANCE) {
+                    continue;
+                }
+                // expected distance to q
+                int exdistq = (pieces[q] == pieces[p]) ? distp : (distp + 1);
+                if (distq == UNKNOWN_DISTANCE || exdistq < distq) {
+                    // found a new or shorter route to q
+                    distance[q] = exdistq;
+                    if (!listed[q]) {
+                        border[idx++] = q;
+                        listed[q] = true;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Assumes that allocateTypes has already been called with this model and
+     * this space, so the information in <code>space</code> accurately reflects
+     * the state of the <code>model</code>.
+     */
+    static void allocateOpponentDistance(FillerModel model, FillerPlayerSpace space) {
+        int[] counted = space.counted;
+        int[] distance = space.opponentDistance;
+        int[] border = space.border;
+        int[] pieces = model.pieces;
+        space.resetListed();
+        boolean[] listed = space.listed;
+        int idx = 0;
+        // allocate the distances we know immediately
+        for (int i=0; i<distance.length; i++) {
+            int ci = counted[i];
+            if (!valid(i)) {
+                distance[i] = UNREACHABLE_DISTANCE;
+            } else if (MUST_BE_MINE.get(ci)) {
+                distance[i] = UNREACHABLE_DISTANCE;
+            } else if (MUST_BE_HIS.get(ci)) {
+                distance[i] = NO_DISTANCE;
+            } else if (ci == HIS_BORDER || ci == SHARED_BORDER) {
                 distance[i] = 1;
                 // remember where the border is
                 border[idx++] = i;

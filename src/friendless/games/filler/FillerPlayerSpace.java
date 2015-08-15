@@ -37,6 +37,8 @@ public class FillerPlayerSpace {
     public boolean[] hisReachable;
     /** Minimum number of turns from our territory to free spaces. */
     public int[] distance;
+    /** Minimum number of turns opponent's territory to free spaces. */
+    public int[] opponentDistance;
 
     static {
         UNLISTED = new boolean[FillerSettings.SIZE];
@@ -52,6 +54,7 @@ public class FillerPlayerSpace {
         hisReachable = new boolean[size];
         counted = new int[size];
         distance = new int[size];
+        opponentDistance = new int[size];
         listed = new boolean[size];
         border = new int[size];
     }
@@ -68,6 +71,7 @@ public class FillerPlayerSpace {
     public void resetCounted() {
         System.arraycopy(UNCOUNTED, 0, counted, 0, counted.length);
         System.arraycopy(UNCOUNTED, 0, distance, 0, distance.length);
+        System.arraycopy(UNCOUNTED, 0, opponentDistance, 0, opponentDistance.length);
     }
 
     public void reset() {

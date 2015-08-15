@@ -111,7 +111,7 @@ public class FillerBoard extends JComponent {
         if (img == null) img = resetOffscreenImage();
         boolean[] captured = space.captured;
         Graphics goff = img.getGraphics();
-        // only have to change colour of pieces already belonging to us
+        // only have to change myColour of pieces already belonging to us
         int[] pieces = model.pieces;
         for (int i=0; i<captured.length; i++) {
             if (captured[i]) {

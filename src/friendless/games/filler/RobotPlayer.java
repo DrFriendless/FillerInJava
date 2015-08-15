@@ -47,14 +47,14 @@ public abstract class RobotPlayer extends DumbRobotPlayer {
         this.otherPlayerColour = otherPlayerColour;
         calculate(model);
         setScores();
-        colour = turn();
-        if (colour < 0) {
-            colour = random_turn();
+        myColour = turn();
+        if (myColour < 0) {
+            myColour = randomTurn();
             // a debugging message - this suggests that your algorithm doesn't cover enough bizarre cases,
             // or that it's the end of the game and the player cannot make a move to get points.
             System.out.println(getName() + " chooses randomly in takeTurn");
         }
-        return colour;
+        return myColour;
     }
 
     /**
@@ -95,9 +95,18 @@ public abstract class RobotPlayer extends DumbRobotPlayer {
         for (int i=0; i<counted.length; i++) {
             if (allowed.get(counted[i])) count[model.pieces[i]]++;
         }
-        // make sure the other player's colour is not chosen
+        // make sure the other player's myColour is not chosen
         count[otherPlayerColour] = -1;
         return count;
+    }
+
+    int countHowMany(BitSet allowed) {
+        int[] counted = space.counted;
+        int total = 0;
+        for (int c : counted) {
+            if (allowed.get(c)) total++;
+        }
+        return total;
     }
 
     /**
@@ -142,6 +151,16 @@ public abstract class RobotPlayer extends DumbRobotPlayer {
         return mostInSetTurn(b);
     }
 
+    public boolean noUndecidedSpaces() {
+        BitSet b = (BitSet) NO_COLOURS.clone();
+        b.set(FillerModel.BORDER);
+        b.set(FillerModel.SHARED_BORDER);
+        b.set(FillerModel.HIS_BORDER);
+        b.set(FillerModel.FREE);
+        int n = countHowMany(b);
+        return n == 0;
+    }
+
     /**
      * Chooses the colour that would get the opponent the most free space in
      * his next turn.
@@ -167,7 +186,7 @@ public abstract class RobotPlayer extends DumbRobotPlayer {
             switch (counted[i]) {
                 case FillerModel.BORDER:
                 case FillerModel.SHARED_BORDER:
-                    int dist = diagDistance(target,i);
+                    int dist = diagDistance(target, i);
                     if ((dist < closest) && (model.pieces[i] != otherPlayerColour)) {
                         favourite = model.pieces[i];
                         closest = dist;
@@ -188,7 +207,7 @@ public abstract class RobotPlayer extends DumbRobotPlayer {
             switch (counted[i]) {
                 case FillerModel.BORDER:
                 case FillerModel.SHARED_BORDER:
-                    int dist = sideDistance(i,o);
+                    int dist = sideDistance(i, o);
                     if ((dist > furthest) && (model.pieces[i] != otherPlayerColour)) {
                         favourite = model.pieces[i];
                         furthest = dist;
@@ -232,6 +251,24 @@ public abstract class RobotPlayer extends DumbRobotPlayer {
             }
         }
         return -1;
+    }
+
+    public BitSet allColoursOnBorder() {
+        BitSet b = new BitSet(FillerSettings.NUM_COLOURS);
+        int[] counted = space.counted;
+        for (int i=0; i<counted.length; i++) {
+            if (counted[i] == FillerModel.BORDER || counted[i] == FillerModel.SHARED_BORDER) {
+                b.set(model.pieces[i]);
+            }
+        }
+        return b;
+    }
+
+    /** Choose a random colour. */
+    public int randomBorderTurn() {
+        BitSet b = allColoursOnBorder();
+        b.set(otherPlayerColour, false);
+        return chooseRandom(b);
     }
 
     protected int dontExpandTurn() {
@@ -288,8 +325,7 @@ public abstract class RobotPlayer extends DumbRobotPlayer {
     }
 
     /**
-     * Figure out how many points each colour is worth. If we can win this move,
-     * return that colour.
+     * Figure out how many points each colour is worth. If we can win this move, return that colour.
      */
     public int mostIfWinTurn() {
         BitSet b = (BitSet) NO_COLOURS.clone();
@@ -310,24 +346,6 @@ public abstract class RobotPlayer extends DumbRobotPlayer {
         } else {
             return -1;
         }
-    }
-
-    protected BitSet maximise(Evaluator evaluator, BitSet colours, FillerModel model, int[] counted) {
-        int most = Integer.MIN_VALUE;
-        BitSet answers = (BitSet)NO_COLOURS.clone();
-        for (int i=0; i<FillerSettings.NUM_COLOURS; i++) {
-            if (colours.get(i)) {
-                int val = evaluator.eval(model, counted);
-                if (val == most) {
-                    answers.set(i);
-                } else if (val > most) {
-                    answers.and(NO_COLOURS);
-                    answers.set(i);
-                    most = val;
-                }
-            }
-        }
-        return answers;
     }
 
     public String getIcon() { return "redAlien.gif"; }

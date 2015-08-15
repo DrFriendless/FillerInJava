@@ -31,7 +31,7 @@ public class Dieter extends OptimalRobotPlayer {
 
     public int turn() {
         BitSet colours = getBestGoalColours(GOAL);
-        colours.clear(colour);
+        colours.clear(myColour);
         colours.clear(otherPlayerColour);
         int attempt = chooseRandom(colours);
         if (attempt < 0) attempt = smartMostTurn();
