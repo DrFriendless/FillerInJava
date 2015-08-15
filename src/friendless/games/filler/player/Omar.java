@@ -17,8 +17,7 @@ package friendless.games.filler.player;
 import friendless.games.filler.*;
 
 /**
- * Omar tries to maximise the distance from the origin of the pieces he
- * takes.
+ * Omar tries to maximise the distance from the origin of the pieces he takes.
  *
  * @author John Farrell
  */

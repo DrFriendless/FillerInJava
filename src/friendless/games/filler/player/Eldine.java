@@ -14,7 +14,6 @@
 
 package friendless.games.filler.player;
 
-import java.awt.*;
 import friendless.games.filler.*;
 
 /**
@@ -29,7 +28,7 @@ public final class Eldine extends RobotPlayer {
 
     public int turn() {
         toggle = !toggle;
-        int attempt = -1;
+        int attempt;
         if (toggle) {
             attempt = dontExpandTurn();
         } else {

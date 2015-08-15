@@ -14,7 +14,6 @@
 
 package friendless.games.filler;
 
-import java.awt.*;
 import java.util.*;
 
 /**
@@ -25,13 +24,13 @@ import java.util.*;
  */
 public abstract class AbstractFillerPlayer implements FillerPlayer {
     /** Get the the X coordinate of piece <code>i</code>. */
-    protected static final int getX(int i) { return FillerModel.getX(i); }
+    protected static int getX(int i) { return FillerModel.getX(i); }
 
     /** Get the the Y coordinate of piece <code>i</code>. */
-    protected static final int getY(int i) { return FillerModel.getY(i); }
+    protected static int getY(int i) { return FillerModel.getY(i); }
 
     /** Make a piece index from a given x and y. */
-    protected static final int makeIndex(int x, int y) {
+    protected static int makeIndex(int x, int y) {
         return FillerModel.makeIndex(x, y);
     }
 
@@ -57,7 +56,7 @@ public abstract class AbstractFillerPlayer implements FillerPlayer {
     }
 
     protected final int[] copy(int[] src) {
-        return (int[]) src.clone();
+        return src.clone();
     }
 
     protected int chooseRandom(BitSet choices) {
@@ -78,9 +77,11 @@ public abstract class AbstractFillerPlayer implements FillerPlayer {
         return -1;
     }
 
+    /** precalculated square roots of the numbers up to 20. */
     static final int[] ROOTS = { 0, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4 };
 
-    protected static final int intRoot(int x) {
+    /** Integer square root algorithm. */
+    protected static int intRoot(int x) {
         if (x < 20) return ROOTS[x];
         int a1 = x/2;
         int a2 = x/a1;
@@ -91,11 +92,11 @@ public abstract class AbstractFillerPlayer implements FillerPlayer {
         return a1;
     }
 
-    protected static final int sideDistance(int p1, int p2) {
+    protected static int sideDistance(int p1, int p2) {
         return Math.abs(getX(p1)-getX(p2)) + Math.abs(getY(p1)-getY(p2));
     }
 
-    protected static final int diagDistance(int p1, int p2) {
+    protected static int diagDistance(int p1, int p2) {
         int x = getX(p1)-getX(p2);
         int y = (getY(p1)-getY(p2)) * 3;
         return intRoot(x*x + y*y);

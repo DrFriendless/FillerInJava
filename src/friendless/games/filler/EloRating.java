@@ -27,7 +27,7 @@ public class EloRating {
     public static String NOVICE, CLASSA, CLASSB, CLASSC, CLASSD, EXPERT, MASTER,
         INTLMASTER, GRANDMASTER, SUPERGRANDMASTER, WORLDCHAMPION;
     public static String[] TITLES;
-    public static final int[] RATINGS = { 0, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600 };
+    public static final int[] RATINGS = { 0, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2100, 2200, 2300 };
     public static final int INITIAL = 1600;
     public static final int PROVISIONAL = 20;
 
@@ -67,8 +67,7 @@ public class EloRating {
      */
     public static int[] expectedWinnings(int[] ratings) {
         double ex = expectancy(ratings);
-        int[] result = { (int) (K * ex), (int) (K * (1.0 - ex)) };
-        return result;
+        return new int[] { (int) (K * ex), (int) (K * (1.0 - ex)) };
     }
 
     /**
@@ -78,7 +77,7 @@ public class EloRating {
      */
     public static int adjust(int[] ratings, int winner) {
         double ex = expectancy(ratings);
-        int delta = 0;
+        int delta;
         if (winner == 0) {
             delta = (int) (K * ex);
             ratings[0] += delta;

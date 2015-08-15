@@ -18,8 +18,7 @@ import friendless.games.filler.*;
 import java.util.*;
 
 /**
- * An OptimalFillerPlayer which takes the shortest route to the centre of the
- * board.
+ * An OptimalFillerPlayer which takes the shortest route to the centre of the board.
  * If the centre of the board is taken, just occupies as much space as possible.
  * Named for Dieter Dengler.
  *

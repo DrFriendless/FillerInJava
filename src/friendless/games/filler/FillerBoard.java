@@ -15,9 +15,6 @@
 package friendless.games.filler;
 
 import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import friendless.awt.*;
 import javax.swing.*;
 
 /**
@@ -41,9 +38,9 @@ public class FillerBoard extends JComponent {
         }
     }
 
-    static final Point topLeft(int i) { return topLefts[i]; }
+    static Point topLeft(int i) { return topLefts[i]; }
 
-    static final Point bottomRight(int i) { return botRights[i]; }
+    static Point bottomRight(int i) { return botRights[i]; }
 
     /** The off-screen image of the board. */
     protected Image off;

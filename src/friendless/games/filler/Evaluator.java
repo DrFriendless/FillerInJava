@@ -26,5 +26,5 @@ public interface Evaluator {
      * @param counted the analysis of the board position telling who owns
      * what.
      */
-    public int eval(FillerModel model, int[] counted);
+    int eval(FillerModel model, int[] counted);
 }

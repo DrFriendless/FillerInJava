@@ -14,16 +14,15 @@
 
 package friendless.games.filler.player;
 
-import java.awt.*;
 import friendless.games.filler.*;
 
 /**
- * Jefferson tries multiple stratgies, and takes the one which gets the most votes.
+ * Jefferson tries multiple strategies, and takes the one which gets the most votes.
  * Named for Thomas Jefferson and William Jefferson Clinton.
  *
  * @author John Farrell
  */
-public final class Jefferson extends RobotPlayer {
+public final class Jefferson extends VotingRobotPlayer {
     public static final int target = FillerModel.makeIndex(FillerSettings.COLUMNS / 2, FillerSettings.ROWS / 2);
 
     public String getName() { return "Jefferson"; }
@@ -32,26 +31,12 @@ public final class Jefferson extends RobotPlayer {
         int attempt = mostIfWinTurn();
         if (attempt >= 0) return attempt;
         int[] votes = new int[FillerSettings.NUM_COLOURS];
-        addVote(votes, furthest_border_turn());
+        addVote(votes, furthestBorderTurn());
         addVote(votes, mostTurn());
         addVote(votes, expandTurn());
         addVote(votes, targetTurn(origins[1]));
         addVote(votes, targetTurn(target));
-        int best = -1;
-        int bestVotes = -1;
-        votes[colour] = -1;
-        for (int i=0; i<votes.length; i++) {
-            if (votes[i] > bestVotes) {
-                bestVotes = votes[i];
-                best = i;
-            }
-        }
-        return best;
-    }
-
-    void addVote(int[] votes, int vote) {
-        if (vote < 0) return;
-        votes[vote]++;
+        return votersChoice(votes);
     }
 
     public String getIcon() { return "blueAlien.gif"; }

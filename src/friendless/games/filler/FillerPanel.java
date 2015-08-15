@@ -61,7 +61,6 @@ public final class FillerPanel extends JPanel implements KeyListener {
     protected CardLayout cards;
     protected JPanel cardPanel;
     protected ResourceBundle resources;
-    private Random rng = new Random();
 
     public FillerPanel(PlayerWrappers players, ResourceBundle resources) {
         this.players = players;
@@ -329,7 +328,7 @@ public final class FillerPanel extends JPanel implements KeyListener {
                     e.printStackTrace();
                 }
             }
-            if ((colours[i] == colours[1-i]) || (colours[i] < 0) || (colours[i] >= FillerSettings.NUM_COLOURS)) {
+            if (colours[i] == colours[1-i] || colours[i] < 0 || colours[i] >= FillerSettings.NUM_COLOURS) {
                 // player chose an invalid colour
                 System.out.println(opponents[i].getName() + " chose " + colours[i]);
                 colours[i] = oldColour;

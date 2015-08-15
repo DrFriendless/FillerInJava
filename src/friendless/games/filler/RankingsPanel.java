@@ -15,10 +15,7 @@
 package friendless.games.filler;
 
 import java.awt.*;
-import java.util.*;
-import friendless.awt.*;
 import javax.swing.*;
-import javax.swing.border.*;
 import javax.swing.text.*;
 import javax.swing.text.Style;
 

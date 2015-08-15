@@ -21,35 +21,35 @@ package friendless.games.filler;
  */
 public interface FillerPlayer {
     /** Short string name of player. */
-    public String getName();
+    String getName();
 
     /** Fully qualified name of player. */
-    public String getFullName();
+    String getFullName();
 
     /**
      * Tell player where they are starting from.
      * @param origin player's origin
      * @param otherOrigin other player's origin
      */
-    public void setOrigin(int origin, int otherOrigin);
+    void setOrigin(int origin, int otherOrigin);
 
     /** Whether this player requires the GUI interface */
-    public boolean requiresButtons();
+    boolean requiresButtons();
 
     /**
      * Ask the player to make a move.
      * @param model the board position
      * @param otherPlayerColour the colour the other player has chosen
      */
-    public int takeTurn(FillerModel model, int otherPlayerColour);
+    int takeTurn(FillerModel model, int otherPlayerColour);
 
     /**
      * Inform the player that a colour was chosen using the GUI interface.
      */
-    public boolean colourChosen(int c);
+    boolean colourChosen(int c);
 
     /**
      * @return the name of an icon for this player.
      */
-    public String getIcon();
+    String getIcon();
 }

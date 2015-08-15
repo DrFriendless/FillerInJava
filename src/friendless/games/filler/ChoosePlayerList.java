@@ -14,13 +14,8 @@
 
 package friendless.games.filler;
 
-import java.awt.*;
-import java.util.*;
 import javax.swing.*;
-import javax.swing.border.*;
 import javax.swing.event.*;
-import javax.swing.table.*;
-import friendless.games.filler.player.*;
 
 /**
  * A list of all players, from which you can choose a subset.

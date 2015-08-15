@@ -14,7 +14,6 @@
 
 package friendless.games.filler.player;
 
-import java.awt.*;
 import friendless.games.filler.*;
 
 /**
@@ -24,8 +23,6 @@ import friendless.games.filler.*;
  * @author John Farrell
  */
 public class Cochise extends RobotPlayer {
-    private Point target;
-
     public String getName() { return "Cochise"; }
 
     public int turn() {
@@ -33,7 +30,7 @@ public class Cochise extends RobotPlayer {
         if (score < 400) {
             attempt = expandTurn();
         } else {
-            attempt = furthest_border_turn();
+            attempt = furthestBorderTurn();
             if (attempt < 0) attempt = mostFreeTurn();
         }
         if (attempt < 0) attempt = mostTurn();

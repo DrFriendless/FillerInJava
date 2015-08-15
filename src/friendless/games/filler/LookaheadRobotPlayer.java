@@ -47,26 +47,20 @@ abstract public class LookaheadRobotPlayer extends RobotPlayer {
                 highest = score;
             }
         }
-        int choice = chooseRandom(results);
-        return choice;
+        return chooseRandom(results);
     }
 
     public class ExpandEvaluator implements Evaluator {
         public int eval(FillerModel model, int[] counted) {
             int furthest = Integer.MIN_VALUE;
             for (int i=0; i<counted.length; i++) {
-                if ((counted[i] == FillerModel.BORDER) || (counted[i] == FillerModel.SHARED_BORDER)) {
+                if (counted[i] == FillerModel.BORDER || counted[i] == FillerModel.SHARED_BORDER) {
                     int dist = sideDistance(origins[0], i);
                     if (dist > furthest) furthest = dist;
                 }
             }
             return furthest;
         }
-    }
-
-    protected BitSet maximise(Evaluator evaluator, int level) {
-        int[] counted = space.counted;
-        return maximise(evaluator,allUsefulColours(),model,counted);
     }
 
     public String getIcon() { return "badrock.png"; }

@@ -34,7 +34,7 @@ public class PlayerWrappers {
         "HumanFillerPlayer", "RemotePlayer", "Sachin", "Dieter", "Isadora",
         "Margaret", "Rosita", "Luigi", "Makhaya", "Claudius", "Basil", "Wanda",
         "Mainoumi", "Omar", "Shirley", "Hugo", "Eldine", "Aleksandr", "Manuelito",
-        "Che", "Cochise", "Jefferson" };
+        "Che", "Cochise", "Jefferson", "Chesterton" };
     public static final String PLAYER_PACKAGE = "friendless.games.filler.player";
     private static Random rng = new Random();
 
@@ -165,7 +165,7 @@ public class PlayerWrappers {
     }
 
     public PlayerWrapper[] toArray() {
-        PlayerWrapper[] result = (PlayerWrapper[]) wrappers.clone();
+        PlayerWrapper[] result = wrappers.clone();
         return result;
     }
 

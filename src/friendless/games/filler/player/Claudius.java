@@ -14,7 +14,6 @@
 
 package friendless.games.filler.player;
 
-import java.awt.*;
 import friendless.games.filler.*;
 
 /**
@@ -23,8 +22,6 @@ import friendless.games.filler.*;
  * @author John Farrell
  */
 public class Claudius extends RobotPlayer {
-    private Point target;
-
     public String getName() { return "Claudius"; }
 
     public int turn() {

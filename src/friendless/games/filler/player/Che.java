@@ -14,7 +14,6 @@
 
 package friendless.games.filler.player;
 
-import java.awt.*;
 import friendless.games.filler.*;
 
 /**
@@ -24,12 +23,10 @@ import friendless.games.filler.*;
  * @author John Farrell
  */
 public final class Che extends RobotPlayer {
-    boolean toggle;
-
     public String getName() { return "Che"; }
 
     public int turn() {
-        int attempt = furthest_border_turn();
+        int attempt = furthestBorderTurn();
         if (attempt < 0) attempt = mostTurn();
         return attempt;
     }

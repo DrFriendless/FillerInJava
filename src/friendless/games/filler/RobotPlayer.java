@@ -24,12 +24,11 @@ import java.util.*;
  */
 public abstract class RobotPlayer extends DumbRobotPlayer {
     protected final BitSet NO_COLOURS = new BitSet(FillerSettings.NUM_COLOURS);
-    protected final BitSet ALL_COLOURS = allColours();
     protected FillerPlayerSpace space;
     protected FillerModel model;
     protected int score;
-    protected int turn, realScore;
-    protected Random rng;
+    protected int turn;
+    protected int realScore;
 
     protected RobotPlayer() {
         space = new FillerPlayerSpace();
@@ -46,15 +45,14 @@ public abstract class RobotPlayer extends DumbRobotPlayer {
         turn++;
         this.model = model;
         this.otherPlayerColour = otherPlayerColour;
-        // System.out.println(getName());
         calculate(model);
         setScores();
         colour = turn();
         if (colour < 0) {
             colour = random_turn();
-            // a debugging message - this suggests that your algorithm doesn't
-            // cover enough bizarre cases.
-            System.out.println(getName() + " chooses randomly");
+            // a debugging message - this suggests that your algorithm doesn't cover enough bizarre cases,
+            // or that it's the end of the game and the player cannot make a move to get points.
+            System.out.println(getName() + " chooses randomly in takeTurn");
         }
         return colour;
     }
@@ -72,8 +70,8 @@ public abstract class RobotPlayer extends DumbRobotPlayer {
         int[] counted = space.counted;
         score = 0;
         realScore = 0;
-        for (int i=0; i<counted.length; i++) {
-            switch (counted[i]) {
+        for (int c : counted) {
+            switch (c) {
                 case FillerModel.MINE:
                     score++;
                     realScore++;
@@ -95,9 +93,7 @@ public abstract class RobotPlayer extends DumbRobotPlayer {
         int[] counted = space.counted;
         int[] count = new int[FillerSettings.NUM_COLOURS];
         for (int i=0; i<counted.length; i++) {
-            if (allowed.get(counted[i])) {
-                count[model.pieces[i]]++;
-            }
+            if (allowed.get(counted[i])) count[model.pieces[i]]++;
         }
         // make sure the other player's colour is not chosen
         count[otherPlayerColour] = -1;
@@ -203,7 +199,7 @@ public abstract class RobotPlayer extends DumbRobotPlayer {
         return favourite;
     }
 
-    public int furthest_border_turn() {
+    public int furthestBorderTurn() {
         int[] counted = space.counted;
         int furthest = -1;
         int favourite = -1;
@@ -243,11 +239,9 @@ public abstract class RobotPlayer extends DumbRobotPlayer {
         int closest = Integer.MAX_VALUE;
         int favourite = -1;
         for (int i=0; i<counted.length; i++) {
-            if ((counted[i] == FillerModel.BORDER) ||
-                    (counted[i] == FillerModel.SHARED_BORDER) ||
-                    (counted[i] == FillerModel.REACHABLE)) {
+            if (counted[i] == FillerModel.BORDER || counted[i] == FillerModel.SHARED_BORDER || counted[i] == FillerModel.REACHABLE) {
                 int dist = diagDistance(i, origins[0]);
-                if ((dist < closest) && (model.pieces[i] != otherPlayerColour)) {
+                if (dist < closest && model.pieces[i] != otherPlayerColour) {
                     favourite = model.pieces[i];
                     closest = dist;
                 }
@@ -318,8 +312,7 @@ public abstract class RobotPlayer extends DumbRobotPlayer {
         }
     }
 
-    protected BitSet maximise(Evaluator evaluator, BitSet colours,
-            FillerModel model, int[] counted) {
+    protected BitSet maximise(Evaluator evaluator, BitSet colours, FillerModel model, int[] counted) {
         int most = Integer.MIN_VALUE;
         BitSet answers = (BitSet)NO_COLOURS.clone();
         for (int i=0; i<FillerSettings.NUM_COLOURS; i++) {

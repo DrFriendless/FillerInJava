@@ -14,12 +14,7 @@
 
 package friendless.games.filler;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.border.*;
 import javax.swing.table.*;
-import friendless.awt.*;
-import friendless.games.filler.player.*;
 
 /**
  * The table model for the head to head display.
@@ -27,7 +22,7 @@ import friendless.games.filler.player.*;
  * @author John Farrell
  */
 class HeadToHeadTableModel extends AbstractTableModel {
-    PlayerWrappers players;
+    private PlayerWrappers players;
 
     public HeadToHeadTableModel(PlayerWrappers players) {
         this.players = players;

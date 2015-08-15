@@ -16,8 +16,6 @@ package friendless.games.filler;
 
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.event.*;
-import java.io.*;
 import java.util.*;
 
 import friendless.games.filler.remote.NetworkPanel;
@@ -30,7 +28,6 @@ import friendless.games.filler.remote.NetworkPanel;
 public class MainPanel extends JPanel {
     JTabbedPane tabPane;
     EditTournamentPanel editTourn;
-    PlayerRatings ratings;
     PlayerWrappers players;
     RankingsPanel rankings;
     HeadToHeadPanel h2h;
@@ -68,9 +65,7 @@ public class MainPanel extends JPanel {
             new JScrollPane(help = new HelpPanel(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED),
             resources.getString("filler.string.help"));
-        tabPane.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent e) { refreshTabs(); }
-        });
+        tabPane.addChangeListener(e -> refreshTabs());
     }
 
     /**

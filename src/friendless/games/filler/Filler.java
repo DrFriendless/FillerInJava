@@ -18,7 +18,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
-import friendless.awt.*;
 import friendless.awt.SplashScreen;
 
 /**
@@ -81,6 +80,5 @@ public final class Filler implements Runnable {
         Filler f = new Filler();
         f.run();
         splash.close();
-        splash = null;
     }
 }

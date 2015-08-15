@@ -16,6 +16,7 @@ package friendless.games.filler;
 
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 
 /**
  * A button with a number and a coloured background, used for the human player
@@ -23,66 +24,31 @@ import javax.swing.*;
  *
  * @author John Farrell
  */
-public class ColourButton extends JRadioButton {
+public class ColourButton extends JButton {
     protected static final int WIDTH = 20;
     protected static final int HEIGHT = 20;
-    protected static final Font numFont = new Font("dialog", Font.BOLD, 10);
-    protected int id, xoff, yoff;
-    protected String label;
-    protected Image normal, disabled;
+    protected int id;
     protected Color colour;
 
     public ColourButton(Color c, int id) {
-        super();
-        setBorderPainted(true);
+        this.id = id;
+        this.colour = c;
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setMinimumSize(new Dimension(WIDTH, HEIGHT));
+        setOpaque(true);
         setRolloverEnabled(false);
-        this.id = id;
-        this.label = Integer.toString(id/2+1);
-        this.colour = c;
-        setMargin(new Insets(0,0,0,0));
+        setText(Integer.toString(id/2+1));
+        setMargin(new Insets(1,1,1,1));
+        setFocusPainted(false);
+        setBorderPainted(true);
+        setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
     }
 
-    public void addNotify() {
-        super.addNotify();
-        FontMetrics fm = getFontMetrics(numFont);
-        xoff = (WIDTH - fm.stringWidth(label) + 1)/2;
-        yoff = 14;
-        // create images
-        Graphics goff;
-        // normal image
-        normal = createImage(WIDTH,HEIGHT);
-        goff = normal.getGraphics();
-        normalPaintIcon(this,goff);
-        goff.dispose();
-        setIcon(new ImageIcon(normal));
-        // disabled image
-        disabled = createImage(WIDTH,HEIGHT);
-        goff = disabled.getGraphics();
-        disabledPaintIcon(this,goff);
-        goff.dispose();
-        setDisabledIcon(new ImageIcon(disabled));
-    }
-
-    /** Draw the normal icon for this button. */
-    public void normalPaintIcon(Component c, Graphics g) {
-        g.setColor(colour);
-        drawInside(c,g);
-        g.setColor(FillerBoard.contrastingColour(colour));
-        g.setFont(numFont);
-        g.drawString(label, xoff, yoff);
-    }
-
-    /** Draw the disabled icon for this button. */
-    public void disabledPaintIcon(Component c, Graphics g) {
-        g.setColor(Color.lightGray);
-        drawInside(c,g);
-    }
-
-    /** Draw the coloured part for this icon. */
-    protected void drawInside(Component c, Graphics g) {
-        g.fillRect(0, 0, WIDTH, HEIGHT);
+    @Override
+    protected void paintComponent(Graphics g) {
+        setBackground(isEnabled() ? colour : Color.lightGray);
+        setForeground(FillerBoard.contrastingColour(getBackground()));
+        super.paintComponent(g);
     }
 
     public int getID() { return id; }

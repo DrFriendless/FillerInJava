@@ -14,7 +14,6 @@
 
 package friendless.games.filler.player;
 
-import java.awt.*;
 import friendless.games.filler.*;
 
 /**
@@ -26,9 +25,9 @@ import friendless.games.filler.*;
  * @author John Farrell
  */
 public final class Aleksandr extends RobotPlayer {
-    int phase = 0;
-    int target;
-    int attempt;
+    enum Phase { NOT_TOUCHING, SHARED_BORDER, END_GAME }
+
+    private Phase phase = Phase.NOT_TOUCHING;
 
     public String getName() { return "Aleksandr"; }
 
@@ -36,25 +35,21 @@ public final class Aleksandr extends RobotPlayer {
         int attempt = -1;
         int[] counted = space.counted;
         int[] typeCount = new int[FillerModel.NUM_TYPES];
-        for (int i=0; i<counted.length; i++) {
-            typeCount[counted[i]]++;
+        for (int c : counted) typeCount[c]++;
+        if (phase == Phase.NOT_TOUCHING && typeCount[FillerModel.SHARED_BORDER] > 0) {
+            phase = Phase.SHARED_BORDER;
         }
-        if ((phase == 0) && (typeCount[FillerModel.SHARED_BORDER] > 0)) {
-            phase = 1;
-        }
-        if ((phase == 1) && ((realScore >= FillerSettings.POINTS_TO_WIN) ||
-                (typeCount[FillerModel.SHARED_BORDER] == 0))) {
-            phase = 2;
+        if (phase == Phase.SHARED_BORDER && (realScore >= FillerSettings.POINTS_TO_WIN || typeCount[FillerModel.SHARED_BORDER] == 0)) {
+            phase = Phase.END_GAME;
         }
         switch (phase) {
-            case 0:
+            case NOT_TOUCHING:
                 attempt = expandTurn();
                 break;
-            case 1:
-                target = calcTarget(counted);
-                attempt = targetTurn(target);
+            case SHARED_BORDER:
+                attempt = targetTurn(calcTarget(counted));
                 break;
-            case 2:
+            case END_GAME:
                 attempt = mostFreeTurn();
                 break;
         }
@@ -64,10 +59,12 @@ public final class Aleksandr extends RobotPlayer {
 
     int calcTarget(int[] counted) {
         int[] corners = new int[4];
-        int[] targets = { FillerModel.makeIndex(FillerSettings.COLUMNS/4,FillerSettings.ROWS/4),
-            FillerModel.makeIndex(FillerSettings.COLUMNS/4,FillerSettings.ROWS*3/4),
-            FillerModel.makeIndex(FillerSettings.COLUMNS*3/4,FillerSettings.ROWS/4),
-            FillerModel.makeIndex(FillerSettings.COLUMNS*3/4,FillerSettings.ROWS*3/4) };
+        int[] targets = {
+                FillerModel.makeIndex(FillerSettings.COLUMNS/4,FillerSettings.ROWS/4),
+                FillerModel.makeIndex(FillerSettings.COLUMNS/4,FillerSettings.ROWS*3/4),
+                FillerModel.makeIndex(FillerSettings.COLUMNS*3/4,FillerSettings.ROWS/4),
+                FillerModel.makeIndex(FillerSettings.COLUMNS*3/4,FillerSettings.ROWS*3/4)
+        };
         for (int i=0; i<counted.length; i++) {
             if (counted[i] == FillerModel.FREE) {
                 int x = getX(i);

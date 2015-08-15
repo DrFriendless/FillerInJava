@@ -64,7 +64,6 @@ public class FillerModel {
     private static final int MAX_NEIGHBOURS = 6;
     /** Indicator that a cell has no neighbour. */
     public static final int NO_NEIGHBOUR = -1;
-    private static int count = 0;
     private static int[] x, y;
     private static int[][] neighs;
     private static final Random rng = new Random();
@@ -108,7 +107,7 @@ public class FillerModel {
      * Put them into the first elements of the array <code>ps</code>.
      * Fill the remaining spaces with the value <code>NO_NEIGHBOUR</code>.
      */
-    private static final int[] calcNeighbours(int i, int[] ps) {
+    private static int[] calcNeighbours(int i, int[] ps) {
         final int columns = FillerSettings.COLUMNS;
         final int rows = FillerSettings.ROWS;
         int xi = x[i];
@@ -145,17 +144,17 @@ public class FillerModel {
         return ps;
     }
 
-    public static final int makeIndex(int x, int y) { return (int)(x * FillerSettings.ROWS + y); }
+    public static int makeIndex(int x, int y) { return x * FillerSettings.ROWS + y; }
 
-    public static final int getX(int i) { return x[i]; }
+    public static int getX(int i) { return x[i]; }
 
-    public static final int getY(int i) { return y[i]; }
+    public static int getY(int i) { return y[i]; }
 
-    public static final boolean valid(int i) { return (x[i] >= 0); }
+    public static boolean valid(int i) { return (x[i] >= 0); }
 
-    public static final int[] neighbours(int i) { return neighs[i]; }
+    public static int[] neighbours(int i) { return neighs[i]; }
 
-    public static final boolean isPerimeter(int i) {
+    public static boolean isPerimeter(int i) {
         int[] ns = neighs[i];
         return ns[ns.length-1] == NO_NEIGHBOUR;
     }
@@ -164,9 +163,7 @@ public class FillerModel {
      * Update the <code>reachable</code> array to determine whether each
      * piece can ever be reached by me.
      */
-    static void allocateFree(FillerModel model, FillerPlayerSpace space, int myBorder,
-            boolean[] reachable) {
-        //int hisBorder = BORDER + HIS_BORDER - myBorder;
+    static void allocateFree(FillerModel model, FillerPlayerSpace space, int myBorder, boolean[] reachable) {
         space.resetListed();
         int[] counted = space.counted;
         boolean[] listed = space.listed;
@@ -174,13 +171,13 @@ public class FillerModel {
         // build up the list of positions on the border
         int idx = 0;
         for (int i=0; i<FillerSettings.SIZE; i++) {
-            if ((counted[i] == myBorder) || (counted[i] == SHARED_BORDER)) {
+            if (counted[i] == myBorder || counted[i] == SHARED_BORDER) {
                 listed[i] = true;
                 border[idx++] = i;
             }
         }
         // process the positions on the border
-        int[] ns = null;
+        int[] ns;
         while (idx > 0) {
             // take a point which is currently on the border
             int p = border[--idx];
@@ -191,8 +188,7 @@ public class FillerModel {
                 case HIS_BORDER:
                     reachable[p] = true;
                     ns = neighs[p];
-                    for (int i=0; i<ns.length; i++) {
-                        int q = ns[i];
+                    for (int q : ns) {
                         if (q == NO_NEIGHBOUR) break;
                         if (!listed[q]) {
                             listed[q] = true;
@@ -211,22 +207,23 @@ public class FillerModel {
      * it's possible that locations on my border may already be marked as being
      * on his border. In those cases, change them to SHARED_BORDER.
      */
-    protected static void allocate(FillerModel model, int origin, FillerPlayerSpace space,
-            int mine, int myBorder) {
+    protected static void allocate(FillerModel model, int origin, FillerPlayerSpace space, int mine, int myBorder) {
         int hisBorder = BORDER + HIS_BORDER - myBorder;
         int his = MINE + HIS - mine;
         space.resetListed();
+        // counted is the types of all locations on the board.
         int[] counted = space.counted;
+        // listed is whether we have already visited this piece.
         boolean[] listed = space.listed;
+        // border is used as a stack of ints, with idx being the stack's height
+        // each value in border is the position of a hex
         int[] border = space.border;
         int colour = model.pieces[origin];
         // origin is mine, its neighbours are the original border
         counted[origin] = mine;
         listed[origin] = true;
         int idx = 0;
-        int[] ns = neighs[origin];
-        for (int i=0; i<ns.length; i++) {
-            int q = ns[i];
+        for (int q : neighs[origin]) {
             if (q == NO_NEIGHBOUR) break;
             listed[q] = true;
             border[idx++] = q;
@@ -236,13 +233,11 @@ public class FillerModel {
             // take a point which is currently on the border
             int p = border[--idx];
             int thisPiece = counted[p];
-            if ((thisPiece == VACANT) || (thisPiece == hisBorder)) {
+            if (thisPiece == VACANT || thisPiece == hisBorder) {
                 if (model.pieces[p] == colour) {
                     // on the border and my colour must be mine
                     counted[p] = mine;
-                    ns = neighs[p];
-                    for (int i=0; i<ns.length; i++) {
-                        int q = ns[i];
+                    for (int q : neighs[p]) {
                         if (q == NO_NEIGHBOUR) break;
                         if (!listed[q]) {
                             listed[q] = true;
@@ -255,9 +250,7 @@ public class FillerModel {
                 } else {
                     // on the border and another colour but not his border must be my border
                     counted[p] = myBorder;
-                    ns = neighs[p];
-                    for (int i=0; i<MAX_NEIGHBOURS; i++) {
-                        int q = ns[i];
+                    for (int q : neighs[p]) {
                         if (q == NO_NEIGHBOUR) break;
                         if (!listed[q] && (model.pieces[p] == model.pieces[q]) && (counted[q] != his)) {
                             listed[q] = true;
@@ -342,8 +335,7 @@ public class FillerModel {
             listed[p] = false;
             int distp = distance[p];
             int[] ns = neighs[p];
-            for (int i=0; i<ns.length; i++) {
-                int q = ns[i];
+            for (int q : ns) {
                 if (q == NO_NEIGHBOUR) break;
                 int distq = distance[q];
                 if (distq == UNREACHABLE_DISTANCE || distq == NO_DISTANCE) {
@@ -373,7 +365,7 @@ public class FillerModel {
         if (pieces.length != FillerSettings.SIZE) {
             throw new IllegalArgumentException("pieces wrong length");
         }
-        this.pieces = (int[]) pieces.clone();
+        this.pieces = pieces.clone();
     }
 
     /**
@@ -410,14 +402,10 @@ public class FillerModel {
         }
     }
 
-    public int[] getPieces() {
-        return pieces;
-    }
-
     public void setPieces(int[] pieces) {
         if (pieces.length != FillerSettings.SIZE) {
             throw new IllegalArgumentException("pieces wrong length");
         }
-        this.pieces = (int[]) pieces.clone();
+        this.pieces = pieces.clone();
     }
 }

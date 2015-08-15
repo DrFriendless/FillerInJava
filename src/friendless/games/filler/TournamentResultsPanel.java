@@ -17,8 +17,6 @@ package friendless.games.filler;
 import java.awt.*;
 import java.util.*;
 import javax.swing.*;
-import javax.swing.table.*;
-import friendless.games.filler.player.*;
 
 /**
  * A Panel to show results of a running tournament

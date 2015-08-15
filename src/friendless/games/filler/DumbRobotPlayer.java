@@ -26,10 +26,8 @@ public abstract class DumbRobotPlayer extends AbstractFillerPlayer {
     /** The colour I already am. */
     protected int colour;
     protected int otherPlayerColour;
-    protected int turn;
 
     public DumbRobotPlayer() {
-        turn = -1;
         colour = 0;
     }
 
@@ -58,7 +56,6 @@ public abstract class DumbRobotPlayer extends AbstractFillerPlayer {
 
     public int takeTurn(FillerModel model, int otherPlayerColour) {
         this.otherPlayerColour = otherPlayerColour;
-        turn++;
         colour = turn();
         if (colour < 0) {
             colour = random_turn();

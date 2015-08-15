@@ -75,14 +75,4 @@ public class FillerPlayerSpace {
         resetCounted();
         // don't clear border, you don't need to
     }
-
-    public int[] combineCountedAndDistance() {
-        int[] result = (int[]) counted.clone();
-        for (int i=0; i<result.length; i++) {
-            if (result[i] == FillerModel.FREE) {
-                result[i] = FillerModel.NUM_TYPES + distance[i];
-            }
-        }
-        return result;
-    }
 }

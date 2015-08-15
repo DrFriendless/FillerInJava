@@ -84,17 +84,17 @@ public class TournamentPointsTable extends AbstractTableModel {
             case 0:
                 return rows[row].getTeam();
             case 1:
-                return new Integer(rows[row].getPlayed());
+                return rows[row].getPlayed();
             case 2:
-                return new Integer(rows[row].getWon());
+                return rows[row].getWon();
             case 3:
-                return new Integer(rows[row].getLost());
+                return rows[row].getLost();
             case 4:
-                return new Integer(rows[row].getFor());
+                return rows[row].getFor();
             case 5:
-                return new Integer(rows[row].getAgainst());
+                return rows[row].getAgainst();
             case 6:
-                return new Integer(rows[row].getDiff());
+                return rows[row].getDiff();
             default:
                 return "error";
         }

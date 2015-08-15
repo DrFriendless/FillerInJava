@@ -24,13 +24,8 @@ import friendless.games.filler.remote.IsMessageID;
 
 /**
  * A player controlled from the GUI.
- *
- * @author John Farrell
  */
-public class RemotePlayer 
-    extends AbstractFillerPlayer
-{
-
+public class RemotePlayer extends AbstractFillerPlayer {
     public String getName() { return "Remote"; }
 
     public String getFullName() { return getName(); }
@@ -44,8 +39,7 @@ public class RemotePlayer
         return turn();
     }
 
-    public int turn()
-    {
+    public int turn() {
         try {
             IsMessage msg = RemoteConnection.getInstance().receiveMessage();
             if (msg.getMessageId() == IsMessageID.MSGID_GAME_MOVE) {

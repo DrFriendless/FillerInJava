@@ -124,7 +124,7 @@ public class Tournaments {
         }
         String template = resources.getString("filler.string.challenges");
         String mesg = MessageFormat.format(template,
-            new Object[] { challenger.getName(), bestOpponent.getName(), new Integer(points) });
+            challenger.getName(), bestOpponent.getName(), points);
         TournamentResultsPanel.getInstance(resources).addText(mesg + SEP);
         return bestOpponent;
     }
@@ -163,7 +163,7 @@ public class Tournaments {
             TournamentResultsPanel.getInstance(resources).addText(resources.getString("filler.string.endofround") + SEP);
         }
         String template = resources.getString("filler.string.knockoutwinner");
-        String mesg = MessageFormat.format(template, new Object[] { players.get(pis[0]) });
+        String mesg = MessageFormat.format(template, players.get(pis[0]));
         panel.showMessage(mesg, "");
         TournamentResultsPanel.getInstance(resources).addText(mesg + SEP);
     }
@@ -219,16 +219,16 @@ public class Tournaments {
     }
 
     private static boolean hasPlayed(PlayerWrapper p1, PlayerWrapper p2,
-            boolean[][] played, Map index) {
-        int i1 = ((Integer) index.get(p1)).intValue();
-        int i2 = ((Integer) index.get(p2)).intValue();
+            boolean[][] played, Map<PlayerWrapper, Integer> index) {
+        int i1 = index.get(p1);
+        int i2 = index.get(p2);
         return played[i1][i2];
     }
 
     private static void setPlayed(PlayerWrapper p1, PlayerWrapper p2,
-            boolean[][] played, Map index, boolean value) {
-        int i1 = ((Integer) index.get(p1)).intValue();
-        int i2 = ((Integer) index.get(p2)).intValue();
+            boolean[][] played, Map<PlayerWrapper, Integer> index, boolean value) {
+        int i1 = index.get(p1);
+        int i2 = index.get(p2);
         played[i1][i2] = value;
     }
 
@@ -243,7 +243,7 @@ public class Tournaments {
     /**
      * Allocate players to matches using a backtracking system.
      */
-    static List allocateBasho(PlayerWrapper[] players, boolean[][] played, Map index,
+    static List allocateBasho(PlayerWrapper[] players, boolean[][] played, Map<PlayerWrapper, Integer> index,
             List allocatedPairs, boolean[] allocated) {
         if (allocatedPairs.size() * 2 == players.length) {
             return allocatedPairs;
@@ -277,7 +277,7 @@ public class Tournaments {
         }
     }
 
-    static List allocateBasho(PlayerWrapper[] players, boolean[][] played, Map index) {
+    static List allocateBasho(PlayerWrapper[] players, boolean[][] played, Map<PlayerWrapper, Integer> index) {
         List allocatedPairs = new ArrayList();
         boolean[] allocated = new boolean[players.length];
         return allocateBasho(players, played, index, allocatedPairs, allocated);
@@ -285,7 +285,7 @@ public class Tournaments {
 
     /**
      * Play a basho tournament. In a real sumo basho, match allocation is a
-     * black art. Every day, matches are alllocated so that rikishi fight
+     * black art. Every day, matches are allocated so that rikishi fight
      * wrestlers of roughly equivalent skill. Towards the end of the tournament,
      * those rikishi with high numbers of wins are pitted against each other.
      * This means that if a lowly ranked rikishi has a large number of wins,
@@ -314,9 +314,9 @@ public class Tournaments {
          * players in the played array in the index map.
          */
         boolean[][] played = new boolean[players.size()][players.size()];
-        Map index = new HashMap(players.size());
+        Map<PlayerWrapper, Integer> index = new HashMap<>(players.size());
         for (int i=0; i<players.size(); i++) {
-            index.put(players.get(i), new Integer(i));
+            index.put(players.get(i), i);
         }
         int openingRounds = rounds/2;
         int closingRounds = rounds - openingRounds;
@@ -332,7 +332,7 @@ public class Tournaments {
             if (cancelled) break;
             sortByWins(ps, wins);
             String mesg = resources.getString("filler.string.basholeader");
-            mesg = MessageFormat.format(mesg, new Object[] { ps[0].getName(), new Integer(wins[0]) });
+            mesg = MessageFormat.format(mesg, ps[0].getName(), new Integer(wins[0]));
             TournamentResultsPanel.getInstance(resources).addText(mesg + SEP);
             List pairs = allocateBasho(ps, played, index);
             playBashoMatches(panel, pairs, ps, wins);
@@ -350,7 +350,7 @@ public class Tournaments {
         }
         if (winner != null) {
             String mesg = resources.getString("filler.string.bashowinner");
-            mesg = MessageFormat.format(mesg, new Object[] { winner.getName() });
+            mesg = MessageFormat.format(mesg, winner.getName());
             panel.showMessage(mesg, "");
             TournamentResultsPanel.getInstance(resources).addText(mesg + SEP);
         }
@@ -417,7 +417,7 @@ public class Tournaments {
 
     static void roundRobin(FillerPanel panel, PlayerWrappers players) {
         int[][] matches = roundRobinMatches(players.size());
-        int[] winners = playTournamentMatches(matches, panel, players, true);
+        playTournamentMatches(matches, panel, players, true);
     }
 
     /**
