@@ -21,6 +21,7 @@ import friendless.games.filler.*;
  *
  * @author John Farrell
  */
+@SuppressWarnings("unused")
 public class Isadora extends RobotPlayer {
     public String getName() { return "Isadora"; }
 

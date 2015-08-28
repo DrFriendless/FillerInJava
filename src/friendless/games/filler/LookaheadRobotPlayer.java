@@ -26,31 +26,35 @@ abstract public class LookaheadRobotPlayer extends RobotPlayer {
     public int lookahead(Evaluator evaluator, boolean distance, boolean opponentDistance) {
         int[] pieces = copy(model.pieces);
         BitSet results = (BitSet) NO_COLOURS.clone();
-        int highest = Integer.MIN_VALUE;
-        for (int c=0; c<FillerSettings.NUM_COLOURS; c++) {
-            if (c == otherPlayerColour || c == myColour) continue;
-            FillerModel model = new FillerModel(pieces);
-            // pretend we took colour c
-            int[] counted = space.counted;
-            calculate(model, false, false);
-            for (int i=0; i<counted.length; i++) {
-                if (counted[i] == FillerModel.MINE) model.pieces[i] = c;
-            }
-            calculate(model, distance, opponentDistance);
-            // now how much does that score?
-            int score = evaluator.eval(model, space, origins);
-            if (score == highest) {
-                results.set(c);
-            } else if (score > highest) {
-                results = (BitSet) NO_COLOURS.clone();
-                results.set(c);
-                highest = score;
-            }
-        }
+        int[] colours = new int[FillerSettings.NUM_COLOURS];
+        for (int c=0; c<FillerSettings.NUM_COLOURS; c++) colours[c] = c;
+
+        Optional<int[]> best = Arrays.stream(colours).
+                filter(c -> c != otherPlayerColour && c != myColour).
+                parallel().
+                mapToObj(c -> eval(pieces, c, evaluator, distance, opponentDistance)).
+                reduce((pair1, pair2) -> (pair1[1] > pair2[1]) ? pair1 : pair2);
+        if (best.isPresent() && best.get()[1] > Integer.MIN_VALUE) return best.get()[0];
         return chooseRandom(results);
     }
 
-    protected void calculate(FillerModel model, boolean distance, boolean opponentDistance) {
+    int[] eval(int[] pieces, int c, Evaluator evaluator, boolean distance, boolean opponentDistance) {
+        FillerModel model = new FillerModel(pieces);
+        // pretend we took colour c
+        int[] counted = space.counted;
+        // need a thread-local space in case we are doing this in parallel.
+        FillerPlayerSpace space = new FillerPlayerSpace();
+        calculate(model, false, false, space);
+        for (int i=0; i<counted.length; i++) {
+            if (counted[i] == FillerModel.MINE) model.pieces[i] = c;
+        }
+        calculate(model, distance, opponentDistance, space);
+        // now how much does that score?
+        int score = evaluator.eval(model, space, origins);
+        return new int[] { c, score };
+    }
+
+    protected void calculate(FillerModel model, boolean distance, boolean opponentDistance, FillerPlayerSpace space) {
         FillerModel.allocateTypes(model, origins, space);
         if (distance) FillerModel.allocateDistance(model, space);
         if (opponentDistance) FillerModel.allocateOpponentDistance(model, space);

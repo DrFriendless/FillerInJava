@@ -9,6 +9,7 @@ import friendless.games.filler.LookaheadRobotPlayer;
  *
  * Created by john on 15/08/15.
  */
+@SuppressWarnings("unused")
 public class Helen extends LookaheadRobotPlayer {
     @Override
     public String getName() {
