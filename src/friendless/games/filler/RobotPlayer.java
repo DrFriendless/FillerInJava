@@ -89,7 +89,7 @@ public abstract class RobotPlayer extends DumbRobotPlayer {
      * Count the number of pieces of each colour for all of the types defined.
      * Make sure that the other player's colour gets a bad score.
      */
-    int[] countSet(BitSet allowed) {
+    protected int[] countSet(BitSet allowed) {
         int[] counted = space.counted;
         int[] count = new int[FillerSettings.NUM_COLOURS];
         for (int i=0; i<counted.length; i++) {

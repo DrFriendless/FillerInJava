@@ -26,14 +26,14 @@ import friendless.games.filler.remote.NetworkPanel;
  * @author John Farrell
  */
 public class MainPanel extends JPanel {
-    JTabbedPane tabPane;
-    EditTournamentPanel editTourn;
-    PlayerWrappers players;
-    RankingsPanel rankings;
-    HeadToHeadPanel h2h;
-    ResourceBundle resources;
-    FillerPanel fillerPanel;
-    HelpPanel help;
+    private JTabbedPane tabPane;
+    private EditTournamentPanel editTourn;
+    private PlayerWrappers players;
+    private RankingsPanel rankings;
+    private HeadToHeadPanel h2h;
+    private ResourceBundle resources;
+    private FillerPanel fillerPanel;
+    private HelpPanel help;
 
     public MainPanel(ResourceBundle resources) {
         super(new BorderLayout());
@@ -46,9 +46,9 @@ public class MainPanel extends JPanel {
         add(tabPane, BorderLayout.CENTER);
         fillerPanel = new FillerPanel(players, resources);
         tabPane.add(resources.getString("filler.mainpanel.name"), fillerPanel);
-        tabPane.addTab(resources.getString("filler.label.tournament"),null,
-            editTourn = new EditTournamentPanel(displayPlayers, resources, this),
-            resources.getString("filler.string.cfgtourn"));
+        tabPane.addTab(resources.getString("filler.label.tournament"), null,
+                editTourn = new EditTournamentPanel(displayPlayers, resources, this),
+                resources.getString("filler.string.cfgtourn"));
         tabPane.addTab(resources.getString("filler.label.rankings"),null,
             new JScrollPane(rankings = new RankingsPanel(displayPlayers)),
             resources.getString("filler.string.rankings"));
@@ -62,9 +62,9 @@ public class MainPanel extends JPanel {
             TournamentResultsPanel.getInstance(resources),
             resources.getString("filler.string.tournamentresults"));
         tabPane.addTab(resources.getString("filler.label.help"),null,
-            new JScrollPane(help = new HelpPanel(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED),
-            resources.getString("filler.string.help"));
+                new JScrollPane(help = new HelpPanel(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                        JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED),
+                resources.getString("filler.string.help"));
         tabPane.addChangeListener(e -> refreshTabs());
     }
 
@@ -81,7 +81,7 @@ public class MainPanel extends JPanel {
         }
     }
 
-    public Dimension getPreferredSize() { return new Dimension(500,430); }
+    public Dimension getPreferredSize() { return new Dimension(680,525); }
 
     public void playTournament(TournamentRules rules, PlayerWrappers tournPlayers) {
         tabPane.setSelectedComponent(fillerPanel);

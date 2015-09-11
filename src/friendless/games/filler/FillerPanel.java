@@ -80,11 +80,7 @@ public final class FillerPanel extends JPanel implements KeyListener {
                 buttons[++k] = new ColourButton(FillerSettings.colours[i],k);
                 buttonGroups[j].add(buttons[k]);
                 buttonPanels[j].add(buttons[k]);
-                buttons[k].addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent evt) {
-                        colourButtonClicked((ColourButton) evt.getSource());
-                    }
-                });
+                buttons[k].addActionListener(evt -> colourButtonClicked((ColourButton) evt.getSource()));
             }
         }
         // create the labels
@@ -129,18 +125,14 @@ public final class FillerPanel extends JPanel implements KeyListener {
         };
         // player panel
         JPanel p;
-        playerPanel.add("",playerNames[0]);
-        playerPanel.add("x",p = new JPanel());
-        playerPanel.add("",cancelButton = new JButton(resources.getString("filler.label.cancel")));
-        cancelButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) { cancel(); }
-        });
+        playerPanel.add("", playerNames[0]);
+        playerPanel.add("x", p = new JPanel());
+        playerPanel.add("", cancelButton = new JButton(resources.getString("filler.label.cancel")));
+        cancelButton.addActionListener(event -> cancel());
         cancelButton.setEnabled(false);
-        playerPanel.add("",playerNames[1]);
-        playerPanel.add("",startButton = new JButton(resources.getString("filler.label.play")));
-        startButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) { playGame(); }
-        });
+        playerPanel.add("", playerNames[1]);
+        playerPanel.add("", startButton = new JButton(resources.getString("filler.label.play")));
+        startButton.addActionListener(event -> playGame());
         // buttons panel
         topPanel.add("", buttonPanels[0]);
         topPanel.add("x", p = new JPanel());
@@ -150,7 +142,7 @@ public final class FillerPanel extends JPanel implements KeyListener {
         p2.add("x", new JPanel());
         p2.add(board = new FillerBoard(), BorderLayout.CENTER);
         p2.add("x", new JPanel());
-        add("",p2);
+        add("", p2);
         showButtons();
     }
 
@@ -179,12 +171,10 @@ public final class FillerPanel extends JPanel implements KeyListener {
         playerNames[0].setEnabled(false);
         playerNames[1].setEnabled(false);
         cancelled = false;
-        Thread t = new Thread(new Runnable() {
-            public void run() {
+        Thread t = new Thread(() -> {
                 Tournaments.tournament(rules, FillerPanel.this, tournPlayers);
                 finish();
-            }
-        });
+            });
         t.start();
     }
 
@@ -194,9 +184,7 @@ public final class FillerPanel extends JPanel implements KeyListener {
         playerNames[0].setEnabled(false);
         playerNames[1].setEnabled(false);
         cancelled = false;
-        Thread t = new Thread(new Runnable() {
-            public void run() { game(); }
-        });
+        Thread t = new Thread(() -> game());
         t.start();
     }
 
@@ -232,8 +220,7 @@ public final class FillerPanel extends JPanel implements KeyListener {
         String winner = (scores[0] > scores[1]) ? opponents[0].getName() : opponents[1].getName();
         String h2h = resources.getString("filler.string.h2h") + ": " +
             PlayerRatings.getHeadToHead(opponents);
-        String mesg = resources.getString("filler.string.winner");
-        mesg = MessageFormat.format(mesg,  new Object[] { winner });
+        String mesg = MessageFormat.format(resources.getString("filler.string.winner"), winner);
         showMessage(mesg, h2h);
         finish();
     }
@@ -260,11 +247,10 @@ public final class FillerPanel extends JPanel implements KeyListener {
         int loser = 1 - winner;
         String h2h = resources.getString("filler.string.h2h") + ": " + PlayerRatings.getHeadToHead(players);
         String mesg = resources.getString("filler.string.winner");
-        mesg = MessageFormat.format(mesg,  new Object[] { players[winner].getName() });
+        mesg = MessageFormat.format(mesg,  players[winner].getName());
         showMessage(mesg, h2h);
         String template = resources.getString("filler.string.matchresult");
-        Object[] args = { players[winner].getName(), players[loser].getName(),
-            new Integer(scores[winner]), new Integer(scores[loser]) };
+        Object[] args = { players[winner].getName(), players[loser].getName(), scores[winner], scores[loser] };
         mesg = MessageFormat.format(template, args);
         TournamentResultsPanel.getInstance(resources).addText(mesg + SEP);
         PlayerRatings.save();
@@ -294,7 +280,7 @@ public final class FillerPanel extends JPanel implements KeyListener {
         // initialise players
         for (int i=0; i<2; i++) {
             opponents[i].setOrigin(FillerSettings.ORIGINS[i],FillerSettings.ORIGINS[1-i]);
-            score[i] = board.countScore(FillerSettings.ORIGINS[i],space[i]);
+            score[i] = board.countScore(FillerSettings.ORIGINS[i], space[i]);
             scoreLabels[i].setText(Integer.toString(score[i]));
         }
         int[] rs = PlayerRatings.getRatings(players[0], players[1]);

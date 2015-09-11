@@ -39,7 +39,7 @@ abstract public class LookaheadRobotPlayer extends RobotPlayer {
     }
 
     int[] eval(int[] pieces, int c, Evaluator evaluator, boolean distance, boolean opponentDistance) {
-        FillerModel model = new FillerModel(pieces);
+        FillerModel model = new FillerModel(pieces, null);
         // pretend we took colour c
         int[] counted = space.counted;
         // need a thread-local space in case we are doing this in parallel.

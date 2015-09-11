@@ -47,10 +47,6 @@ public class PopupFillerBoard extends FillerBoard {
         frame.setVisible(true);
     }
 
-    public void popup() {
-        popup("Filler Board");
-    }
-
     public static void popup(FillerModel model, String name) {
         (new PopupFillerBoard(model)).popup(name);
     }

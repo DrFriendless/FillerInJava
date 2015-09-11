@@ -23,6 +23,7 @@ import java.util.*;
  *
  * @author John Farrell
  */
+@SuppressWarnings("unused")
 public class Sachin extends OptimalRobotPlayer {
     public static final int CENTRE = FillerModel.makeIndex(FillerSettings.COLUMNS / 2, FillerSettings.ROWS / 2);
     protected int[] goals;
@@ -62,7 +63,6 @@ public class Sachin extends OptimalRobotPlayer {
         BitSet colours = getBestGoalColours(goal);
         colours.clear(myColour);
         colours.clear(otherPlayerColour);
-        int attempt = chooseRandom(colours);
-        return attempt;
+        return chooseRandom(colours);
     }
 }

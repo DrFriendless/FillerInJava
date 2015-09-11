@@ -60,10 +60,9 @@ public class FillerModel {
     public static final int UNREACHABLE_DISTANCE = -1;
     /** Uncalculated distance. */
     public static final int UNKNOWN_DISTANCE = -2;
+
     /** Maximum neighbours that a cell could have. */
     private static final int MAX_NEIGHBOURS = 6;
-    /** Indicator that a cell has no neighbour. */
-    public static final int NO_NEIGHBOUR = -1;
     private static int[] x, y;
     private static int[][] neighs;
     private static final Random rng = new Random();
@@ -96,9 +95,9 @@ public class FillerModel {
             }
         }
         //
-        neighs = new int[size][MAX_NEIGHBOURS];
+        neighs = new int[size][];
         for (int i=0; i<size; i++) {
-            if (x[i] >= 0) calcNeighbours(i, neighs[i]);
+            if (x[i] >= 0) neighs[i] = calcNeighbours(i);
         }
     }
 
@@ -107,12 +106,13 @@ public class FillerModel {
      * Put them into the first elements of the array <code>ps</code>.
      * Fill the remaining spaces with the value <code>NO_NEIGHBOUR</code>.
      */
-    private static int[] calcNeighbours(int i, int[] ps) {
+    private static int[] calcNeighbours(int i) {
         final int columns = FillerSettings.COLUMNS;
         final int rows = FillerSettings.ROWS;
         int xi = x[i];
         int yi = y[i];
         int idx = 0;
+        int[] ps = new int[MAX_NEIGHBOURS];
         // to the right
         if (xi < columns-2) ps[idx++] = makeIndex(xi+2, yi);
         // to the left
@@ -140,9 +140,9 @@ public class FillerModel {
                 ps[idx++] = makeIndex(xi+1, yi+1);
             }
         }
-        // TODO - we don't even really need these entries.
-        while (idx < ps.length) ps[idx++] = NO_NEIGHBOUR;
-        return ps;
+        int[] result = new int[idx];
+        System.arraycopy(ps, 0, result, 0, idx);
+        return result;
     }
 
     public static int makeIndex(int x, int y) { return x * FillerSettings.ROWS + y; }
@@ -157,14 +157,14 @@ public class FillerModel {
 
     public static boolean isPerimeter(int i) {
         int[] ns = neighs[i];
-        return ns[ns.length-1] == NO_NEIGHBOUR;
+        return ns.length < MAX_NEIGHBOURS;
     }
 
     /**
      * Update the <code>reachable</code> array to determine whether each
      * piece can ever be reached by me.
      */
-    static void allocateFree(FillerModel model, FillerPlayerSpace space, int myBorder, boolean[] reachable) {
+    static void allocateFree(FillerPlayerSpace space, int myBorder, boolean[] reachable) {
         space.resetListed();
         int[] counted = space.counted;
         boolean[] listed = space.listed;
@@ -190,7 +190,6 @@ public class FillerModel {
                     reachable[p] = true;
                     ns = neighs[p];
                     for (int q : ns) {
-                        if (q == NO_NEIGHBOUR) break;
                         if (!listed[q]) {
                             listed[q] = true;
                             border[idx++] = q;
@@ -225,7 +224,6 @@ public class FillerModel {
         listed[origin] = true;
         int idx = 0;
         for (int q : neighs[origin]) {
-            if (q == NO_NEIGHBOUR) break;
             listed[q] = true;
             border[idx++] = q;
         }
@@ -239,7 +237,6 @@ public class FillerModel {
                     // on the border and my myColour must be mine
                     counted[p] = mine;
                     for (int q : neighs[p]) {
-                        if (q == NO_NEIGHBOUR) break;
                         if (!listed[q]) {
                             listed[q] = true;
                             border[idx++] = q;
@@ -252,7 +249,6 @@ public class FillerModel {
                     // on the border and another myColour but not his border must be my border
                     counted[p] = myBorder;
                     for (int q : neighs[p]) {
-                        if (q == NO_NEIGHBOUR) break;
                         if (!listed[q] && (model.pieces[p] == model.pieces[q]) && (counted[q] != his)) {
                             listed[q] = true;
                             border[idx++] = q;
@@ -273,10 +269,10 @@ public class FillerModel {
         boolean[] hisReachable = space.hisReachable;
         space.reset();
         space.resetReachable();
-        allocate(model, origins[0], space, MINE, BORDER);
         allocate(model, origins[1], space, HIS, HIS_BORDER);
-        allocateFree(model, space, BORDER, reachable);
-        allocateFree(model, space, HIS_BORDER, hisReachable);
+        allocate(model, origins[0], space, MINE, BORDER);
+        allocateFree(space, BORDER, reachable);
+        allocateFree(space, HIS_BORDER, hisReachable);
         for (int i=0; i<reachable.length; i++) {
             if (reachable[i]) {
                 if (!hisReachable[i]) {
@@ -335,9 +331,7 @@ public class FillerModel {
             int p = border[--idx];
             listed[p] = false;
             int distp = distance[p];
-            int[] ns = neighs[p];
-            for (int q : ns) {
-                if (q == NO_NEIGHBOUR) break;
+            for (int q : neighs[p]) {
                 int distq = distance[q];
                 if (distq == UNREACHABLE_DISTANCE || distq == NO_DISTANCE) {
                     continue;
@@ -395,7 +389,6 @@ public class FillerModel {
             int distp = distance[p];
             int[] ns = neighs[p];
             for (int q : ns) {
-                if (q == NO_NEIGHBOUR) break;
                 int distq = distance[q];
                 if (distq == UNREACHABLE_DISTANCE || distq == NO_DISTANCE) {
                     continue;
@@ -420,7 +413,7 @@ public class FillerModel {
         this.pieces = new int[FillerSettings.SIZE];
     }
 
-    public FillerModel(int[] pieces) {
+    public FillerModel(int[] pieces, String name) {
         if (pieces.length != FillerSettings.SIZE) {
             throw new IllegalArgumentException("pieces wrong length");
         }

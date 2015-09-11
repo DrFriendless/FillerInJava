@@ -39,7 +39,7 @@ public abstract class OptimalRobotPlayer extends RobotPlayer {
     protected BitSet getBestGoalColours(int goal) {
         int[] distance = space.distance;
         int distanceToGoal = distance[goal];
-        if (distanceToGoal <= 0) new BitSet(FillerSettings.NUM_COLOURS);
+        if (distanceToGoal <= 0) return new BitSet(FillerSettings.NUM_COLOURS);
         /* We now know the distance to the goal.
          * We have to find a sequence of locations with ever-decreasing distances
          * until we get to locations which are distance 0, i.e. on the border.
@@ -53,16 +53,13 @@ public abstract class OptimalRobotPlayer extends RobotPlayer {
         int[] lowerDistance = new int[distance.length];
         int lowerDistanceIndex = 0;
         thisDistance[thisDistanceIndex++] = goal;
-        // find all the pieces of the same myColour joined to the goal
+        // find all the pieces of the same colour joined to the goal
         while (thisDistanceIndex > 0) {
             int p = thisDistance[--thisDistanceIndex];
             if (listed[p]) continue;
             lowerDistance[lowerDistanceIndex++] = p;
             listed[p] = true;
-            int[] ns = FillerModel.neighbours(p);
-            for (int i=0; i<ns.length; i++) {
-                int q = ns[i];
-                if (q == FillerModel.NO_NEIGHBOUR) break;
+            for (int q : FillerModel.neighbours(p)) {
                 if (listed[q]) continue;
                 if (pieces[q] == pieces[goal]) {
                     thisDistance[thisDistanceIndex++] = q;
@@ -78,10 +75,7 @@ public abstract class OptimalRobotPlayer extends RobotPlayer {
         while (distanceToGoal > 1) {
             while (thisDistanceIndex > 0) {
                 int p = thisDistance[--thisDistanceIndex];
-                int[] ns = FillerModel.neighbours(p);
-                for (int i=0; i<ns.length; i++) {
-                    int q = ns[i];
-                    if (q == FillerModel.NO_NEIGHBOUR) break;
+                for (int q : FillerModel.neighbours(p)) {
                     if (listed[q]) continue;
                     int distq = distance[q];
                     if (distq >= 0 && distq < distanceToGoal) {
@@ -90,7 +84,7 @@ public abstract class OptimalRobotPlayer extends RobotPlayer {
                     }
                 }
             }
-            // add neighbours of same myColour attached to pieces at the lower distance (yuk)
+            // add neighbours of same colour attached to pieces at the lower distance (yuk)
             tempArray = lowerDistance;
             lowerDistance = thisDistance;
             thisDistance = tempArray;
@@ -99,10 +93,7 @@ public abstract class OptimalRobotPlayer extends RobotPlayer {
             while (thisDistanceIndex > 0) {
                 int p = thisDistance[--thisDistanceIndex];
                 lowerDistance[lowerDistanceIndex++] = p;
-                int[] ns = FillerModel.neighbours(p);
-                for (int i=0; i<ns.length; i++) {
-                    int q = ns[i];
-                    if (q == FillerModel.NO_NEIGHBOUR) break;
+                for (int q : FillerModel.neighbours(p)) {
                     if (listed[q]) continue;
                     if (pieces[p] == pieces[q]) {
                         thisDistance[thisDistanceIndex++] = q;
