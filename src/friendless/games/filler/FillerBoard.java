@@ -16,27 +16,38 @@ package friendless.games.filler;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+
 /**
  * A graphical component which is the array of hexagons.
  *
  * @author John Farrell
  */
-public class FillerBoard extends JComponent {
+public class FillerBoard extends JComponent implements ComponentListener {
     /** the pixel coordinates of the hexes */
-    static Point[] topLefts, botRights;
-    private static final int SIZE = 7;
+    Point[] topLefts, botRights;
+    public final static int MIN_SIZE = 5;
+    int count;
+    int SIZE = MIN_SIZE;
+    Dimension dim;
 
-    static {
+    public void updateSize() {
+        Dimension mySize = getSize();
+        int dX = FillerSettings.COLUMNS > 0 ? mySize.width / (FillerSettings.COLUMNS + 1) : MIN_SIZE;
+        int dY = FillerSettings.ROWS > 0 ? mySize.height / FillerSettings.ROWS  / 4 : MIN_SIZE;
+//        System.out.printf("width=%d height=%d cols=%d rows=%d dx=%d dy=%d\n",
+//            mySize.width, mySize.height, FillerSettings.COLUMNS, FillerSettings.ROWS, dX, dY);
+        SIZE = (dX < dY) ? dX : dY;
+        if (SIZE < MIN_SIZE) { SIZE = MIN_SIZE; }
         int size = FillerSettings.SIZE;
-        topLefts = new Point[size];
-        botRights = new Point[size];
-        for (int i=0; i<size; i++) {
+        for (int i=0; i<count; i++) {
             int x = FillerModel.getX(i);
             int y = FillerModel.getY(i);
             topLefts[i] = new Point(x * SIZE + SIZE,y * SIZE * 4 + (x % 2) * SIZE * 2 - SIZE);
@@ -44,9 +55,19 @@ public class FillerBoard extends JComponent {
         }
     }
 
-    static Point topLeft(int i) { return topLefts[i]; }
+    public void componentHidden(ComponentEvent e) { /* System.out.printf("componentHidden\n"); */ }
+    public void componentMoved(ComponentEvent e) { /* System.out.printf("componentMoved\n"); */ }
+    public void componentShown(ComponentEvent e) { /* System.out.printf("componentShown\n"); */ }
+    public void componentResized(ComponentEvent e) {
+        /* System.out.printf("componentResized\n"); */
+        updateSize();
+        revalidate();
+        repaint();
+    }
 
-    static Point bottomRight(int i) { return botRights[i]; }
+    Point topLeft(int i) { return topLefts[i]; }
+
+    Point bottomRight(int i) { return botRights[i]; }
 
     /** The off-screen image of the board. */
     protected BufferedImage off;
@@ -54,6 +75,12 @@ public class FillerBoard extends JComponent {
 
     public FillerBoard() {
         this(new FillerModel());
+        count = FillerSettings.SIZE;
+        topLefts = new Point[count];
+        botRights = new Point[count];
+        dim = new Dimension(600, 400);
+        this.addComponentListener(this);
+        updateSize();
     }
 
     public FillerBoard(FillerModel model) {
@@ -272,15 +299,23 @@ public class FillerBoard extends JComponent {
         drawHexCentre(g,c,i);
     }
 
-    public Dimension getMinimumSize() { return getPreferredSize(); }
+    public Dimension getMinimumSize() {
+//        Point p1 = bottomRight(FillerModel.makeIndex(FillerSettings.COLUMNS-1,FillerSettings.ROWS-1));
+//        Point p2 = bottomRight(FillerModel.makeIndex(FillerSettings.COLUMNS-2,FillerSettings.ROWS-1));
+//        Dimension min_dim = new Dimension((p1.x < p2.x) ? p2.x : p1.x, (p1.y < p2.y) ? p2.y : p1.y);
+//        min_dim.width += MIN_SIZE;
+//        min_dim.height += MIN_SIZE;
+//        return min_dim;
+        return dim;
+    }
 
     public Dimension getPreferredSize() {
-        Point p1 = bottomRight(FillerModel.makeIndex(FillerSettings.COLUMNS-1,FillerSettings.ROWS-1));
-        Point p2 = bottomRight(FillerModel.makeIndex(FillerSettings.COLUMNS-2,FillerSettings.ROWS-1));
-        Dimension dim = new Dimension((p1.x < p2.x) ? p2.x : p1.x, (p1.y < p2.y) ? p2.y : p1.y);
-        dim.width += SIZE;
-        dim.height += SIZE;
         return dim;
+    }
+
+    public void setBoardSize(Dimension newDim) {
+        dim = newDim;
+        setSize(dim);
     }
 
     public void paintComponent(Graphics g) {

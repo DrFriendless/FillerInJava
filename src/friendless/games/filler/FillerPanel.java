@@ -22,6 +22,9 @@ import java.util.*;
 import friendless.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.ComponentAdapter;
 // for remote player
 import friendless.games.filler.remote.RemoteConnection;
 import friendless.games.filler.remote.messages.MoveMessage;
@@ -138,12 +141,30 @@ public final class FillerPanel extends JPanel implements KeyListener {
         topPanel.add("x", p = new JPanel());
         topPanel.add("", buttonPanels[1]);
         // complete panel
-        JPanel p2 = new JPanel(new HCodeLayout("", 0));
-        p2.add("x", new JPanel());
-        p2.add(board = new FillerBoard(), BorderLayout.CENTER);
-        p2.add("x", new JPanel());
-        add("", p2);
+//        JPanel p2 = new JPanel(new HCodeLayout("", 0));
+//        p2.add("x", new JPanel());
+//        p2.add("x", board = new FillerBoard()); //, BorderLayout.CENTER
+//        p2.add("x", new JPanel());
+//        add("", p2);
+        board = new FillerBoard();
+        add("", board);
         showButtons();
+
+        FillerPanel me = this;
+        me.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                //System.out.printf("was: x=%d y=%d w=%d h=%d\n",
+                //    board.getLocation().x, board.getLocation().y, board.getSize().width, board.getSize().height);
+                Dimension xSize = me.getSize();
+                Point p2Location = board.getLocation();
+                xSize.height-= p2Location.y;
+                board.setBoardSize(xSize);
+                //System.out.printf("set: width=%d height=%d\n", xSize.width, xSize.height);
+            }
+        });
+
+
     }
 
     public void showMessage(String s1, String s2) {
