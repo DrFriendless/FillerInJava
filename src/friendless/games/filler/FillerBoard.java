@@ -40,8 +40,8 @@ public class FillerBoard extends JComponent implements ComponentListener {
 
     public void updateSize() {
         Dimension mySize = getSize();
-        int dX = FillerSettings.COLUMNS > 0 ? (mySize.width - 10) / FillerSettings.COLUMNS : MIN_SIZE;
-        int dY = FillerSettings.ROWS > 0 ? (mySize.height - 10) / FillerSettings.ROWS  / 4 : MIN_SIZE;
+        int dX = FillerSettings.COLUMNS > 0 ? mySize.width / (FillerSettings.COLUMNS + 1) : MIN_SIZE;
+        int dY = FillerSettings.ROWS > 0 ? mySize.height / FillerSettings.ROWS  / 4 : MIN_SIZE;
 //        System.out.printf("width=%d height=%d cols=%d rows=%d dx=%d dy=%d\n",
 //            mySize.width, mySize.height, FillerSettings.COLUMNS, FillerSettings.ROWS, dX, dY);
         SIZE = (dX < dY) ? dX : dY;
