@@ -5,3 +5,5 @@ fast enough for complex algorithms and complex games.
 
 Please look at the INSTALL file for installation tips.
 Please look at the HACKER file for ideas for developers.
+
+Also under Linux may use ./rebuild.sh && ./run.sh to build&run game inplace
